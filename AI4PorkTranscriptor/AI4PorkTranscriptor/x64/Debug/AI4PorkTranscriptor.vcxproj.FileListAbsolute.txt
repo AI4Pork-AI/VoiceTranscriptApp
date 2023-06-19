@@ -1,0 +1,4 @@
+C:\Users\Pol Llagostera\source\repos\AI4PorkTranscriptor\AI4PorkTranscriptor\x64\Debug\AI4PorkTranscriptor.vcxproj.AssemblyReference.cache
+C:\Users\Pol Llagostera\source\repos\AI4PorkTranscriptor\AI4PorkTranscriptor\x64\Debug\AI4PorkTranscriptor.vcxproj.SuggestedBindingRedirects.cache
+C:\Users\Pol Llagostera\source\repos\AI4PorkTranscriptor\AI4PorkTranscriptor\x64\Debug\AI4PorkTranscriptor.Interface.resources
+C:\Users\Pol Llagostera\source\repos\AI4PorkTranscriptor\AI4PorkTranscriptor\x64\Debug\AI4PorkTranscriptor.vcxproj.GenerateResource.cache
