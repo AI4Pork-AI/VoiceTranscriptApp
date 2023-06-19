@@ -1,0 +1,11 @@
+C:\Users\usuari\Cplus_Projects\AITranscriptor\AITranscriptor\bin\Debug\AITranscriptor.exe.config
+C:\Users\usuari\Cplus_Projects\AITranscriptor\AITranscriptor\bin\Debug\AITranscriptor.exe
+C:\Users\usuari\Cplus_Projects\AITranscriptor\AITranscriptor\bin\Debug\AITranscriptor.pdb
+C:\Users\usuari\Cplus_Projects\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.csproj.AssemblyReference.cache
+C:\Users\usuari\Cplus_Projects\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.csproj.SuggestedBindingRedirects.cache
+C:\Users\usuari\Cplus_Projects\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.Form1.resources
+C:\Users\usuari\Cplus_Projects\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.Properties.Resources.resources
+C:\Users\usuari\Cplus_Projects\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.csproj.GenerateResource.cache
+C:\Users\usuari\Cplus_Projects\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.csproj.CoreCompileInputs.cache
+C:\Users\usuari\Cplus_Projects\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.exe
+C:\Users\usuari\Cplus_Projects\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.pdb

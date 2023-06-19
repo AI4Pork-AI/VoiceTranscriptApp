@@ -2,3 +2,7 @@ C:\Users\Pol Llagostera\source\repos\AI4PorkTranscriptor\AI4PorkTranscriptor\x64
 C:\Users\Pol Llagostera\source\repos\AI4PorkTranscriptor\AI4PorkTranscriptor\x64\Debug\AI4PorkTranscriptor.vcxproj.SuggestedBindingRedirects.cache
 C:\Users\Pol Llagostera\source\repos\AI4PorkTranscriptor\AI4PorkTranscriptor\x64\Debug\AI4PorkTranscriptor.Interface.resources
 C:\Users\Pol Llagostera\source\repos\AI4PorkTranscriptor\AI4PorkTranscriptor\x64\Debug\AI4PorkTranscriptor.vcxproj.GenerateResource.cache
+D:\CodingProjects\Cplus_Projects\VoiceTranscriptApp\AI4PorkTranscriptor\AI4PorkTranscriptor\x64\Debug\AI4PorkTranscriptor.vcxproj.AssemblyReference.cache
+D:\CodingProjects\Cplus_Projects\VoiceTranscriptApp\AI4PorkTranscriptor\AI4PorkTranscriptor\x64\Debug\AI4PorkTranscriptor.vcxproj.SuggestedBindingRedirects.cache
+D:\CodingProjects\Cplus_Projects\VoiceTranscriptApp\AI4PorkTranscriptor\AI4PorkTranscriptor\x64\Debug\AI4PorkTranscriptor.Interface.resources
+D:\CodingProjects\Cplus_Projects\VoiceTranscriptApp\AI4PorkTranscriptor\AI4PorkTranscriptor\x64\Debug\AI4PorkTranscriptor.vcxproj.GenerateResource.cache

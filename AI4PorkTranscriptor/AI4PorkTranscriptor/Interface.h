@@ -187,10 +187,10 @@ namespace AI4PorkTranscriptor {
 			textBox1->Text = "";
 	}
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
-		ShellExecuteA(NULL, "open", "C:\\", NULL, NULL, SW_SHOWDEFAULT);
+		ShellExecuteA(NULL, "open", "D:\\CodingProjects\\Cplus_Projects\\VoiceTranscriptApp\\AI4PorkTranscriptor\\AI4PorkTranscriptor", NULL, NULL, SW_SHOWDEFAULT);
 	}
 	private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
-
+		system("./main -f samples/jfk.wav -otxt");
 	}
 };
 }
