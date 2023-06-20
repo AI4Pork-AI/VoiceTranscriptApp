@@ -12,9 +12,9 @@ using System.Windows.Forms;
 
 namespace AITranscriptor
 {
-    public partial class Form1 : Form
+    public partial class Form_Transctiptor : Form
     {
-        public Form1()
+        public Form_Transctiptor()
         {
             InitializeComponent();
         }
@@ -59,8 +59,15 @@ namespace AITranscriptor
 
             string output = process.StandardOutput.ReadToEnd();
             process.WaitForExit();
-
-            textBox1.Text = File.ReadAllText(Application.StartupPath + "\\samples\\" + filename+".txt");
+            try
+            {
+                textBox1.Text = File.ReadAllText(Application.StartupPath + "\\samples\\" + filename + ".txt");
+            }
+            catch (FileNotFoundException)
+            {
+                textBox1.Text = "Error: Transcript file couldn't be created.";
+            }
+            
 
             Console.WriteLine("Current date (received from CMD):");
             Console.Write(output);
@@ -91,7 +98,7 @@ namespace AITranscriptor
             Console.WriteLine(result); // <-- For debugging use.
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void open_transcript_Click(object sender, EventArgs e)
         {
             Process.Start(Application.StartupPath+"\\samples");
         }
@@ -106,6 +113,37 @@ namespace AITranscriptor
             {
                 textBox1.Text = "";
             }
+        }
+
+        private void menu_button_Click(object sender, EventArgs e)
+        {
+            if (panel2.Height == 116) panel2.Height = 29;
+            else panel2.Height = 116;
+        }
+
+        private void menu_button_MouseHover(object sender, EventArgs e)
+        {
+            panel2.Height = 116;
+        }
+
+        private void menu_button_MouseLeave(object sender, EventArgs e)
+        {
+            panel2.Height = 29;
+        }
+
+        private void Form(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void model_type_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

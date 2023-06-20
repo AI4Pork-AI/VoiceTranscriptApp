@@ -1,6 +1,6 @@
 ﻿namespace AITranscriptor
 {
-    partial class Form1
+    partial class Form_Transctiptor
     {
         /// <summary>
         /// Variable del diseñador necesaria.
@@ -30,44 +30,63 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.open_transcript_button = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.button3 = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.menu_button = new System.Windows.Forms.Button();
+            this.model_type = new System.Windows.Forms.ComboBox();
+            this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.button1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.button1.FlatAppearance.BorderSize = 0;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(12, 38);
+            this.button1.Location = new System.Drawing.Point(0, 29);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(112, 30);
+            this.button1.Size = new System.Drawing.Size(202, 29);
             this.button1.TabIndex = 0;
             this.button1.Text = "Load Audio";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
+            this.button2.BackColor = System.Drawing.Color.SandyBrown;
+            this.button2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.button2.FlatAppearance.BorderSize = 0;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(130, 38);
+            this.button2.Location = new System.Drawing.Point(0, 58);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(171, 30);
+            this.button2.Size = new System.Drawing.Size(202, 29);
             this.button2.TabIndex = 1;
             this.button2.Text = "Open Transcription";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button3
+            // open_transcript_button
             // 
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(307, 38);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(203, 30);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "Open Transcript Folder";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.open_transcript_button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.open_transcript_button.Dock = System.Windows.Forms.DockStyle.Top;
+            this.open_transcript_button.FlatAppearance.BorderSize = 0;
+            this.open_transcript_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.open_transcript_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.open_transcript_button.Location = new System.Drawing.Point(0, 87);
+            this.open_transcript_button.Name = "open_transcript_button";
+            this.open_transcript_button.Size = new System.Drawing.Size(202, 29);
+            this.open_transcript_button.TabIndex = 2;
+            this.open_transcript_button.Text = "Open Transcript Folder";
+            this.open_transcript_button.UseVisualStyleBackColor = false;
+            this.open_transcript_button.Click += new System.EventHandler(this.open_transcript_Click);
             // 
             // textBox1
             // 
@@ -98,19 +117,89 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // Form1
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.Gray;
+            this.panel1.Controls.Add(this.button3);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(800, 22);
+            this.panel1.TabIndex = 6;
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.Transparent;
+            this.button3.Font = new System.Drawing.Font("MV Boli", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.ForeColor = System.Drawing.Color.Red;
+            this.button3.Location = new System.Drawing.Point(769, -1);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(31, 23);
+            this.button3.TabIndex = 0;
+            this.button3.Text = "X";
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.panel2.Controls.Add(this.open_transcript_button);
+            this.panel2.Controls.Add(this.button2);
+            this.panel2.Controls.Add(this.button1);
+            this.panel2.Controls.Add(this.menu_button);
+            this.panel2.Location = new System.Drawing.Point(15, 22);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(202, 29);
+            this.panel2.TabIndex = 7;
+            // 
+            // menu_button
+            // 
+            this.menu_button.BackColor = System.Drawing.Color.Red;
+            this.menu_button.Dock = System.Windows.Forms.DockStyle.Top;
+            this.menu_button.FlatAppearance.BorderSize = 0;
+            this.menu_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.menu_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menu_button.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.menu_button.Location = new System.Drawing.Point(0, 0);
+            this.menu_button.Name = "menu_button";
+            this.menu_button.Size = new System.Drawing.Size(202, 29);
+            this.menu_button.TabIndex = 0;
+            this.menu_button.Text = "Menu";
+            this.menu_button.UseVisualStyleBackColor = false;
+            this.menu_button.Click += new System.EventHandler(this.menu_button_Click);
+            this.menu_button.MouseLeave += new System.EventHandler(this.menu_button_MouseLeave);
+            this.menu_button.MouseHover += new System.EventHandler(this.menu_button_MouseHover);
+            // 
+            // model_type
+            // 
+            this.model_type.FormattingEnabled = true;
+            this.model_type.Items.AddRange(new object[] {
+            "Small",
+            "Medium ",
+            "High"});
+            this.model_type.Location = new System.Drawing.Point(306, 58);
+            this.model_type.Name = "model_type";
+            this.model_type.Size = new System.Drawing.Size(121, 21);
+            this.model_type.TabIndex = 8;
+            this.model_type.SelectedIndexChanged += new System.EventHandler(this.model_type_SelectedIndexChanged);
+            this.model_type.SelectedIndex = 0;
+            // 
+            // Form_Transctiptor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.model_type);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Name = "Form1";
+            this.Name = "Form_Transctiptor";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form);
+            this.panel1.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -120,10 +209,15 @@
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button open_transcript_button;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button menu_button;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.ComboBox model_type;
     }
 }
 
