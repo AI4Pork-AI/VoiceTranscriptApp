@@ -20,3 +20,14 @@ C:\Users\Pol Llagostera\Documents\CodingProjects\Cplus\VoiceTranscriptApp\AITran
 C:\Users\Pol Llagostera\Documents\CodingProjects\Cplus\VoiceTranscriptApp\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.exe
 C:\Users\Pol Llagostera\Documents\CodingProjects\Cplus\VoiceTranscriptApp\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.pdb
 C:\Users\Pol Llagostera\Documents\CodingProjects\Cplus\VoiceTranscriptApp\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.Form_Transctiptor.resources
+D:\CodingProjects\Cplus_Projects\VoiceTranscriptApp\AITranscriptor\AITranscriptor\bin\Debug\AITranscriptor.exe.config
+D:\CodingProjects\Cplus_Projects\VoiceTranscriptApp\AITranscriptor\AITranscriptor\bin\Debug\AITranscriptor.exe
+D:\CodingProjects\Cplus_Projects\VoiceTranscriptApp\AITranscriptor\AITranscriptor\bin\Debug\AITranscriptor.pdb
+D:\CodingProjects\Cplus_Projects\VoiceTranscriptApp\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.csproj.AssemblyReference.cache
+D:\CodingProjects\Cplus_Projects\VoiceTranscriptApp\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.csproj.SuggestedBindingRedirects.cache
+D:\CodingProjects\Cplus_Projects\VoiceTranscriptApp\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.Form_Transctiptor.resources
+D:\CodingProjects\Cplus_Projects\VoiceTranscriptApp\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.Properties.Resources.resources
+D:\CodingProjects\Cplus_Projects\VoiceTranscriptApp\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.csproj.GenerateResource.cache
+D:\CodingProjects\Cplus_Projects\VoiceTranscriptApp\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.csproj.CoreCompileInputs.cache
+D:\CodingProjects\Cplus_Projects\VoiceTranscriptApp\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.exe
+D:\CodingProjects\Cplus_Projects\VoiceTranscriptApp\AITranscriptor\AITranscriptor\obj\Debug\AITranscriptor.pdb

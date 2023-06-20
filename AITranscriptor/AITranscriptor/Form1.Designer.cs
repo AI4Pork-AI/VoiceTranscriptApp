@@ -39,6 +39,11 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.menu_button = new System.Windows.Forms.Button();
             this.model_type = new System.Windows.Forms.ComboBox();
+            this.fileType = new System.Windows.Forms.ComboBox();
+            this.transcriptLanguage = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.outputType = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -177,18 +182,81 @@
             "Small",
             "Medium ",
             "High"});
-            this.model_type.Location = new System.Drawing.Point(306, 58);
+            this.model_type.Location = new System.Drawing.Point(15, 80);
             this.model_type.Name = "model_type";
             this.model_type.Size = new System.Drawing.Size(121, 21);
             this.model_type.TabIndex = 8;
             this.model_type.SelectedIndexChanged += new System.EventHandler(this.model_type_SelectedIndexChanged);
-            this.model_type.SelectedIndex = 0;
+            // 
+            // fileType
+            // 
+            this.fileType.FormattingEnabled = true;
+            this.fileType.Items.AddRange(new object[] {
+            "txt",
+            "csv",
+            "vtt",
+            "srt",
+            "words (karaoke)"});
+            this.fileType.Location = new System.Drawing.Point(142, 80);
+            this.fileType.Name = "fileType";
+            this.fileType.Size = new System.Drawing.Size(121, 21);
+            this.fileType.TabIndex = 9;
+            this.fileType.SelectedIndexChanged += new System.EventHandler(this.fileType_SelectedIndexChanged);
+            // 
+            // transcriptLanguage
+            // 
+            this.transcriptLanguage.FormattingEnabled = true;
+            this.transcriptLanguage.Items.AddRange(new object[] {
+            "Auto",
+            "Catalan",
+            "Spanish ",
+            "English"});
+            this.transcriptLanguage.Location = new System.Drawing.Point(269, 80);
+            this.transcriptLanguage.Name = "transcriptLanguage";
+            this.transcriptLanguage.Size = new System.Drawing.Size(121, 21);
+            this.transcriptLanguage.TabIndex = 10;
+            this.transcriptLanguage.SelectedIndexChanged += new System.EventHandler(this.transcriptLanguage_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(12, 61);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(71, 16);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "Accuracy";
+            // 
+            // outputType
+            // 
+            this.outputType.AutoSize = true;
+            this.outputType.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.outputType.Location = new System.Drawing.Point(139, 61);
+            this.outputType.Name = "outputType";
+            this.outputType.Size = new System.Drawing.Size(81, 16);
+            this.outputType.TabIndex = 12;
+            this.outputType.Text = "Output File";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(266, 61);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(76, 16);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "Language";
             // 
             // Form_Transctiptor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.outputType);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.transcriptLanguage);
+            this.Controls.Add(this.fileType);
             this.Controls.Add(this.model_type);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -218,6 +286,11 @@
         private System.Windows.Forms.Button menu_button;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ComboBox model_type;
+        private System.Windows.Forms.ComboBox fileType;
+        private System.Windows.Forms.ComboBox transcriptLanguage;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label outputType;
+        private System.Windows.Forms.Label label4;
     }
 }
 
