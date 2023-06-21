@@ -95,6 +95,9 @@
             // 
             // textBox1
             // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Location = new System.Drawing.Point(12, 124);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
@@ -134,6 +137,7 @@
             // 
             // button3
             // 
+            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button3.BackColor = System.Drawing.Color.Transparent;
             this.button3.Font = new System.Drawing.Font("MV Boli", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.ForeColor = System.Drawing.Color.Red;
@@ -156,6 +160,7 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(202, 29);
             this.panel2.TabIndex = 7;
+            this.panel2.Click += new System.EventHandler(this.panel2_Click);
             // 
             // menu_button
             // 
@@ -172,13 +177,13 @@
             this.menu_button.Text = "Menu";
             this.menu_button.UseVisualStyleBackColor = false;
             this.menu_button.Click += new System.EventHandler(this.menu_button_Click);
-            this.menu_button.MouseLeave += new System.EventHandler(this.menu_button_MouseLeave);
-            this.menu_button.MouseHover += new System.EventHandler(this.menu_button_MouseHover);
             // 
             // model_type
             // 
             this.model_type.FormattingEnabled = true;
             this.model_type.Items.AddRange(new object[] {
+            "Tiny",
+            "Base",
             "Small",
             "Medium ",
             "High"});
@@ -192,6 +197,7 @@
             // 
             this.fileType.FormattingEnabled = true;
             this.fileType.Items.AddRange(new object[] {
+            "none",
             "txt",
             "csv",
             "vtt",
@@ -206,11 +212,6 @@
             // transcriptLanguage
             // 
             this.transcriptLanguage.FormattingEnabled = true;
-            this.transcriptLanguage.Items.AddRange(new object[] {
-            "Auto",
-            "Catalan",
-            "Spanish ",
-            "English"});
             this.transcriptLanguage.Location = new System.Drawing.Point(269, 80);
             this.transcriptLanguage.Name = "transcriptLanguage";
             this.transcriptLanguage.Size = new System.Drawing.Size(121, 21);
@@ -266,6 +267,7 @@
             this.Name = "Form_Transctiptor";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form);
+            this.Click += new System.EventHandler(this.Form_Transctiptor_Click);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
