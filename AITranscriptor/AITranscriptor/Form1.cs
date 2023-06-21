@@ -113,9 +113,12 @@ namespace AITranscriptor
 
         private void button4_Click(object sender, EventArgs e)
         {
+            string args = "-m " + Application.StartupPath + "\\models\\"+ this.model_type + 
+                          " -f " + Application.StartupPath + "\\samples\\" + filename + 
+                          " -o" + this.file_type;
             if (textBox1.Text == "")
             {
-                textBox1.Text = Application.StartupPath;
+                textBox1.Text = args;
             }
             else
             {
