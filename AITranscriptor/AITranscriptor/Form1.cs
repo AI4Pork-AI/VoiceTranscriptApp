@@ -129,7 +129,7 @@ namespace AITranscriptor
             transcriptLanguage.DisplayMember = "Value";
             transcriptLanguage.ValueMember = "Key";
 
-            model_type.SelectedIndex = 1;
+            modelType.SelectedIndex = 1;
             fileType.SelectedIndex = 0;
             transcriptLanguage.SelectedIndex = 0;
         }
@@ -143,7 +143,7 @@ namespace AITranscriptor
             //                             "-otxt";
 
             processStartInfo.FileName = Application.StartupPath + "\\main.exe";
-            processStartInfo.Arguments = Application.StartupPath + " -f samples\\" + filename + " -otxt";
+            processStartInfo.Arguments = this.whisperArgsSetup();
             processStartInfo.CreateNoWindow = true;
             processStartInfo.UseShellExecute = false;
             processStartInfo.RedirectStandardOutput = true;
@@ -154,9 +154,9 @@ namespace AITranscriptor
             return process;
         }
 
-        private string whispeArgsSetup()
+        private string whisperArgsSetup()
         {
-            string args = "-m " + Application.StartupPath + "\\models\\" + this.nn_model + (this.lang == "en" ? ".en" : "") + ".bin" +
+            string args = " -m " + Application.StartupPath + "\\models\\" + this.nn_model + (this.lang == "en" ? ".en" : "") + ".bin" +
                           " -f " + Application.StartupPath + "\\samples\\" + filename +
                           (transcriptLanguage.SelectedIndex == 0 ? "" : " -l " + this.lang) +
                           " " + this.file_type;
@@ -247,12 +247,12 @@ namespace AITranscriptor
             Process.Start(Application.StartupPath+"\\samples");
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void testButton_Click(object sender, EventArgs e)
         {
-            string args = this.whispeArgsSetup();
+            string args = this.whisperArgsSetup();
             if (textBox1.Text == "")
             {
-                textBox1.Text = args;
+                textBox1.Text = Application.StartupPath + "\\main.exe" + args;
             }
             else
             {
@@ -282,9 +282,52 @@ namespace AITranscriptor
             if (panel2.Height == 116) panel2.Height = 29;
         }
 
-        private void model_type_SelectedIndexChanged(object sender, EventArgs e)
+        private void transcript_Click(object sender, EventArgs e)
         {
-            switch (model_type.SelectedIndex)
+            Process whisper = this.whisperSetup();
+            whisper.Start();
+
+            string output = whisper.StandardOutput.ReadToEnd();
+            whisper.WaitForExit();
+
+            try
+            {
+                textBox1.Text = File.ReadAllText(Application.StartupPath + "\\samples\\" + filename + ".txt");
+            }
+            catch (FileNotFoundException)
+            {
+                //textBox1.Text = "Error: Transcript file couldn't be created.";
+            }
+
+
+            Console.WriteLine("Current date (received from CMD):");
+            Console.Write(output);
+        }
+
+        private void loadAudio_Click(object sender, EventArgs e)
+        {
+            int size = -1;
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            DialogResult result = openFileDialog.ShowDialog(); // Show the dialog.
+            if (result == DialogResult.OK) // Test result.
+            {
+                string file = openFileDialog.FileName;
+                try
+                {
+                    this.filename = openFileDialog.SafeFileName;
+                    label1.Text = this.filename;
+                }
+                catch (IOException)
+                {
+                }
+            }
+            Console.WriteLine(size); // <-- Shows file size in debugging mode.
+            Console.WriteLine(result); // <-- For debugging use.
+        }
+
+        private void modelType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (modelType.SelectedIndex)
             {
                 case 0: //tiny
                     this.nn_model = "ggml-tiny";
@@ -310,30 +353,30 @@ namespace AITranscriptor
 
         private void fileType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (model_type.SelectedIndex)
+            switch (fileType.SelectedIndex)
             {
                 case 0: //txt
+                    this.file_type = "";
+                    break;
+
+                case 1: //txt
                     this.file_type = "-otxt";
                     break;
 
-                case 1: //csv
+                case 2: //csv
                     this.file_type = "-ocsv";
                     break;
 
-                case 2: //vtt
+                case 3: //vtt
                     this.file_type = "-ovtt";
                     break;
 
-                case 3: //srt
+                case 4: //srt
                     this.file_type = "-osrt";
                     break;
 
-                case 4: //words (karaoke)
+                case 5: //words (karaoke)
                     this.file_type = "-owts";
-                    break;
-
-                default:
-                    this.file_type = "";
                     break;
             }
         }

@@ -33,17 +33,20 @@
             this.open_transcript_button = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
+            this.testButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button3 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.menu_button = new System.Windows.Forms.Button();
-            this.model_type = new System.Windows.Forms.ComboBox();
+            this.modelType = new System.Windows.Forms.ComboBox();
             this.fileType = new System.Windows.Forms.ComboBox();
             this.transcriptLanguage = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.outputType = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.transcript = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.loadAudio = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -108,22 +111,22 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 105);
+            this.label1.Location = new System.Drawing.Point(159, 41);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(116, 16);
+            this.label1.Size = new System.Drawing.Size(49, 16);
             this.label1.TabIndex = 4;
-            this.label1.Text = "No transcription";
+            this.label1.Text = "no file";
             // 
-            // button4
+            // testButton
             // 
-            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(713, 38);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 30);
-            this.button4.TabIndex = 5;
-            this.button4.Text = "Test";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.testButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.testButton.Location = new System.Drawing.Point(713, 80);
+            this.testButton.Name = "testButton";
+            this.testButton.Size = new System.Drawing.Size(75, 30);
+            this.testButton.TabIndex = 5;
+            this.testButton.Text = "Test";
+            this.testButton.UseVisualStyleBackColor = true;
+            this.testButton.Click += new System.EventHandler(this.testButton_Click);
             // 
             // panel1
             // 
@@ -151,12 +154,13 @@
             // 
             // panel2
             // 
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panel2.Controls.Add(this.open_transcript_button);
             this.panel2.Controls.Add(this.button2);
             this.panel2.Controls.Add(this.button1);
             this.panel2.Controls.Add(this.menu_button);
-            this.panel2.Location = new System.Drawing.Point(15, 22);
+            this.panel2.Location = new System.Drawing.Point(597, 22);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(202, 29);
             this.panel2.TabIndex = 7;
@@ -178,20 +182,20 @@
             this.menu_button.UseVisualStyleBackColor = false;
             this.menu_button.Click += new System.EventHandler(this.menu_button_Click);
             // 
-            // model_type
+            // modelType
             // 
-            this.model_type.FormattingEnabled = true;
-            this.model_type.Items.AddRange(new object[] {
+            this.modelType.FormattingEnabled = true;
+            this.modelType.Items.AddRange(new object[] {
             "Tiny",
             "Base",
             "Small",
             "Medium ",
             "High"});
-            this.model_type.Location = new System.Drawing.Point(15, 80);
-            this.model_type.Name = "model_type";
-            this.model_type.Size = new System.Drawing.Size(121, 21);
-            this.model_type.TabIndex = 8;
-            this.model_type.SelectedIndexChanged += new System.EventHandler(this.model_type_SelectedIndexChanged);
+            this.modelType.Location = new System.Drawing.Point(14, 93);
+            this.modelType.Name = "modelType";
+            this.modelType.Size = new System.Drawing.Size(121, 21);
+            this.modelType.TabIndex = 8;
+            this.modelType.SelectedIndexChanged += new System.EventHandler(this.modelType_SelectedIndexChanged);
             // 
             // fileType
             // 
@@ -203,7 +207,7 @@
             "vtt",
             "srt",
             "words (karaoke)"});
-            this.fileType.Location = new System.Drawing.Point(142, 80);
+            this.fileType.Location = new System.Drawing.Point(141, 93);
             this.fileType.Name = "fileType";
             this.fileType.Size = new System.Drawing.Size(121, 21);
             this.fileType.TabIndex = 9;
@@ -212,7 +216,7 @@
             // transcriptLanguage
             // 
             this.transcriptLanguage.FormattingEnabled = true;
-            this.transcriptLanguage.Location = new System.Drawing.Point(269, 80);
+            this.transcriptLanguage.Location = new System.Drawing.Point(268, 93);
             this.transcriptLanguage.Name = "transcriptLanguage";
             this.transcriptLanguage.Size = new System.Drawing.Size(121, 21);
             this.transcriptLanguage.TabIndex = 10;
@@ -222,7 +226,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 61);
+            this.label2.Location = new System.Drawing.Point(11, 74);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(71, 16);
             this.label2.TabIndex = 11;
@@ -232,7 +236,7 @@
             // 
             this.outputType.AutoSize = true;
             this.outputType.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.outputType.Location = new System.Drawing.Point(139, 61);
+            this.outputType.Location = new System.Drawing.Point(138, 74);
             this.outputType.Name = "outputType";
             this.outputType.Size = new System.Drawing.Size(81, 16);
             this.outputType.TabIndex = 12;
@@ -242,26 +246,61 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(266, 61);
+            this.label4.Location = new System.Drawing.Point(265, 74);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(76, 16);
+            this.label4.Size = new System.Drawing.Size(120, 16);
             this.label4.TabIndex = 13;
-            this.label4.Text = "Language";
+            this.label4.Text = "Audio Language";
+            // 
+            // transcript
+            // 
+            this.transcript.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.transcript.Location = new System.Drawing.Point(409, 86);
+            this.transcript.Name = "transcript";
+            this.transcript.Size = new System.Drawing.Size(101, 30);
+            this.transcript.TabIndex = 14;
+            this.transcript.Text = "Transcript";
+            this.transcript.UseVisualStyleBackColor = true;
+            this.transcript.Click += new System.EventHandler(this.transcript_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(116, 41);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(37, 16);
+            this.label3.TabIndex = 15;
+            this.label3.Text = "File:";
+            // 
+            // loadAudio
+            // 
+            this.loadAudio.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.loadAudio.Location = new System.Drawing.Point(12, 37);
+            this.loadAudio.Name = "loadAudio";
+            this.loadAudio.Size = new System.Drawing.Size(101, 24);
+            this.loadAudio.TabIndex = 16;
+            this.loadAudio.Text = "Load Audio";
+            this.loadAudio.UseVisualStyleBackColor = true;
+            this.loadAudio.Click += new System.EventHandler(this.loadAudio_Click);
             // 
             // Form_Transctiptor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.loadAudio);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.transcript);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.outputType);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.transcriptLanguage);
             this.Controls.Add(this.fileType);
-            this.Controls.Add(this.model_type);
+            this.Controls.Add(this.modelType);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.button4);
+            this.Controls.Add(this.testButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
             this.Name = "Form_Transctiptor";
@@ -282,17 +321,20 @@
         private System.Windows.Forms.Button open_transcript_button;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button testButton;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button menu_button;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.ComboBox model_type;
+        private System.Windows.Forms.ComboBox modelType;
         private System.Windows.Forms.ComboBox fileType;
         private System.Windows.Forms.ComboBox transcriptLanguage;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label outputType;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button transcript;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button loadAudio;
     }
 }
 
