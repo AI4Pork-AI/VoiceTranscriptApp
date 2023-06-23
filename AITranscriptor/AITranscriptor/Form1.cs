@@ -9,12 +9,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace AITranscriptor
 {
     public partial class Form_Transctiptor : Form
     {
         string nn_model, file_type, lang, filename;
+        string audioFolderName = "audio";
+        string transcriptFolderName = "transcripts";
+        string translateFolderName = "translations";
 
         SortedDictionary<string, string>  g_lang = new SortedDictionary<string, string>
         {
@@ -120,8 +124,6 @@ namespace AITranscriptor
             { "su",  "sundanese"},
         };
 
-        
-
         public Form_Transctiptor()
         {
             InitializeComponent();
@@ -132,47 +134,79 @@ namespace AITranscriptor
             modelType.SelectedIndex = 1;
             fileType.SelectedIndex = 0;
             transcriptLanguage.SelectedIndex = 0;
+
+            //Create directories if doesn't exist
+            Directory.CreateDirectory(Application.StartupPath + "\\"+this.audioFolderName+"\\");
+            Directory.CreateDirectory(Application.StartupPath + "\\"+this.translateFolderName+"\\");
+            Directory.CreateDirectory(Application.StartupPath + "\\" + this.transcriptFolderName + "\\");
         }
 
-        private Process whisperSetup()
+        private Process convertFile()
         {
-            ProcessStartInfo processStartInfo = new ProcessStartInfo();
-            //processStartInfo.FileName = "C:\\Users\\usuari\\Cplus_Projects\\AITranscriptor\\AITranscriptor\\main.exe";
-            //processStartInfo.Arguments = "-m C:\\Users\\usuari\\Cplus_Projects\\AITranscriptor\\AITranscriptor\\models\\ggml-base.en.bin " +
-            //                             "-f C:\\Users\\usuari\\Cplus_Projects\\AITranscriptor\\AITranscriptor\\samples\\jfk.wav " +
-            //                             "-otxt";
+            //ffmpeg - i input.mp3 - ar 16000 - ac 1 - c:a pcm_s16le output.wav
+            string args = "-i " + Application.StartupPath + "\\"+this.audioFolderName+"\\" + this.filename +
+                          " -ar 16000" +
+                          " -ac 1" +
+                          " -c:a pcm_s16le " +
+                          Application.StartupPath + "\\"+this.audioFolderName+"\\" + Path.GetFileNameWithoutExtension(this.filename) + ".wav";
 
-            processStartInfo.FileName = Application.StartupPath + "\\main.exe";
-            processStartInfo.Arguments = this.whisperArgsSetup();
+            ProcessStartInfo processStartInfo = new ProcessStartInfo();
+
+            processStartInfo.FileName = Application.StartupPath + "\\ffmpeg.exe";
+            processStartInfo.Arguments = args;
             processStartInfo.CreateNoWindow = true;
             processStartInfo.UseShellExecute = false;
             processStartInfo.RedirectStandardOutput = true;
 
             Process process = new Process();
             process.StartInfo = processStartInfo;
-
             return process;
         }
 
-        private string whisperArgsSetup()
+        private void exitButton_Click(object sender, EventArgs e)
         {
-            string args = " -m " + Application.StartupPath + "\\models\\" + this.nn_model + (this.lang == "en" ? ".en" : "") + ".bin" +
-                          " -f " + Application.StartupPath + "\\samples\\" + filename +
-                          (transcriptLanguage.SelectedIndex == 0 ? "" : " -l " + this.lang) +
-                          " " + this.file_type;
-            return args;
+            Application.Exit();
+        }
+
+        private void fileType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (fileType.SelectedIndex)
+            {
+                case 0: //txt
+                    this.file_type = "-otxt";
+                    break;
+
+                case 1: //csv
+                    this.file_type = "-ocsv";
+                    break;
+
+                case 2: //vtt
+                    this.file_type = "-ovtt";
+                    break;
+
+                case 3: //srt
+                    this.file_type = "-osrt";
+                    break;
+
+                case 4: //words (karaoke)
+                    this.file_type = "-owts";
+                    break;
+            }
         }
 
         private void Form(object sender, EventArgs e)
         {
-           
+
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Form_Transctiptor_Click(object sender, EventArgs e)
         {
             if (panel2.Height == 116) panel2.Height = 29;
-            else panel2.Height = 116;
+        }
 
+        private void loadAudio_Click(object sender, EventArgs e)
+        {
+            string ext;
             int size = -1;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             DialogResult result = openFileDialog.ShowDialog(); // Show the dialog.
@@ -182,6 +216,24 @@ namespace AITranscriptor
                 try
                 {
                     this.filename = openFileDialog.SafeFileName;
+                    ext = Path.GetExtension(this.filename);
+
+                    if (ext != ".wav")
+                    {
+                        if (!File.Exists(Application.StartupPath + "\\"+this.audioFolderName+"\\" + Path.GetFileNameWithoutExtension(this.filename) + ".wav"))
+                        {
+                            Process ffmpeg = this.convertFile();
+                            ffmpeg.Start();
+                            string output = ffmpeg.StandardOutput.ReadToEnd();
+                            //textBox1.Text = "Converting file into .wav... Please wait"; //TODO: Please wait
+                            ffmpeg.WaitForExit();
+                            
+                            //textBox1.Text = "";
+                            Console.WriteLine("Current date (received from CMD):");
+                            Console.Write(output);
+                        }
+                    }
+                    this.filename = Path.GetFileNameWithoutExtension(this.filename) + ".wav";
                     label1.Text = this.filename;
                 }
                 catch (IOException)
@@ -190,30 +242,9 @@ namespace AITranscriptor
             }
             Console.WriteLine(size); // <-- Shows file size in debugging mode.
             Console.WriteLine(result); // <-- For debugging use.
-
-            Process whisper = this.whisperSetup();
-            whisper.Start();
-
-            string output = whisper.StandardOutput.ReadToEnd();
-            whisper.WaitForExit();
-
-            try
-            {
-                textBox1.Text = File.ReadAllText(Application.StartupPath + "\\samples\\" + filename + ".txt");
-            }
-            catch (FileNotFoundException)
-            {
-                textBox1.Text = "Error: Transcript file couldn't be created.";
-            }
-            
-
-            Console.WriteLine("Current date (received from CMD):");
-            Console.Write(output);
-            //Process.Start("C:\\Users\\usuari\\Cplus_Projects\\AITranscriptor\\AITranscriptor\\main -f samples/jfk.wav -otxt");
-            //Process.Start(@"C:\\Users\\usuari\\Cplus_Projects\\AITranscriptor\\AITranscriptor\\main", "-f samples\\jfk.wav -otxt");
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void loadTranscript_Click(object sender, EventArgs e)
         {
             if (panel2.Height == 116) panel2.Height = 29;
             else panel2.Height = 116;
@@ -229,7 +260,7 @@ namespace AITranscriptor
                     string text = File.ReadAllText(file);
                     size = text.Length;
                     label1.Text = openFileDialog.SafeFileName;
-                    textBox1.Text = text;  
+                    textBox1.Text = text;
                 }
                 catch (IOException)
                 {
@@ -237,92 +268,12 @@ namespace AITranscriptor
             }
             Console.WriteLine(size); // <-- Shows file size in debugging mode.
             Console.WriteLine(result); // <-- For debugging use.
-
-        }
-
-        private void open_transcript_Click(object sender, EventArgs e)
-        {
-            if (panel2.Height == 116) panel2.Height = 29;
-            else panel2.Height = 116;
-            Process.Start(Application.StartupPath+"\\samples");
-        }
-
-        private void testButton_Click(object sender, EventArgs e)
-        {
-            string args = this.whisperArgsSetup();
-            if (textBox1.Text == "")
-            {
-                textBox1.Text = Application.StartupPath + "\\main.exe" + args;
-            }
-            else
-            {
-                textBox1.Text = "";
-            }
         }
 
         private void menu_button_Click(object sender, EventArgs e)
         {
             if (panel2.Height == 116) panel2.Height = 29;
             else panel2.Height = 116;
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void panel2_Click(object sender, EventArgs e)
-        {
-            if (panel2.Height == 116) panel2.Height = 29;
-            else panel2.Height = 116;
-        }
-
-        private void Form_Transctiptor_Click(object sender, EventArgs e)
-        {
-            if (panel2.Height == 116) panel2.Height = 29;
-        }
-
-        private void transcript_Click(object sender, EventArgs e)
-        {
-            Process whisper = this.whisperSetup();
-            whisper.Start();
-
-            string output = whisper.StandardOutput.ReadToEnd();
-            whisper.WaitForExit();
-
-            try
-            {
-                textBox1.Text = File.ReadAllText(Application.StartupPath + "\\samples\\" + filename + ".txt");
-            }
-            catch (FileNotFoundException)
-            {
-                //textBox1.Text = "Error: Transcript file couldn't be created.";
-            }
-
-
-            Console.WriteLine("Current date (received from CMD):");
-            Console.Write(output);
-        }
-
-        private void loadAudio_Click(object sender, EventArgs e)
-        {
-            int size = -1;
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            DialogResult result = openFileDialog.ShowDialog(); // Show the dialog.
-            if (result == DialogResult.OK) // Test result.
-            {
-                string file = openFileDialog.FileName;
-                try
-                {
-                    this.filename = openFileDialog.SafeFileName;
-                    label1.Text = this.filename;
-                }
-                catch (IOException)
-                {
-                }
-            }
-            Console.WriteLine(size); // <-- Shows file size in debugging mode.
-            Console.WriteLine(result); // <-- For debugging use.
         }
 
         private void modelType_SelectedIndexChanged(object sender, EventArgs e)
@@ -351,39 +302,113 @@ namespace AITranscriptor
             }
         }
 
-        private void fileType_SelectedIndexChanged(object sender, EventArgs e)
+        private void openTranscript_Click(object sender, EventArgs e)
         {
-            switch (fileType.SelectedIndex)
+            if (panel2.Height == 116) panel2.Height = 29;
+            else panel2.Height = 116;
+            Process.Start(Application.StartupPath + "\\"+this.audioFolderName+"");
+        }
+
+        private void panel2_Click(object sender, EventArgs e)
+        {
+            if (panel2.Height == 116) panel2.Height = 29;
+            else panel2.Height = 116;
+        }
+
+        private void testButton_Click(object sender, EventArgs e)
+        {
+            string args = this.whisperArgsSetup(false);
+            if (textBox1.Text == "")
             {
-                case 0: //txt
-                    this.file_type = "";
-                    break;
-
-                case 1: //txt
-                    this.file_type = "-otxt";
-                    break;
-
-                case 2: //csv
-                    this.file_type = "-ocsv";
-                    break;
-
-                case 3: //vtt
-                    this.file_type = "-ovtt";
-                    break;
-
-                case 4: //srt
-                    this.file_type = "-osrt";
-                    break;
-
-                case 5: //words (karaoke)
-                    this.file_type = "-owts";
-                    break;
+                textBox1.Text = Application.StartupPath + "\\main.exe" + args;
             }
+            else
+            {
+                textBox1.Text = "";
+            }
+        }
+
+        private void transcript_Click(object sender, EventArgs e)
+        {
+            Process whisper = this.whisperSetup(false);
+            whisper.Start();
+
+            textBox1.Text = "Transcripting audio... Please wait";
+
+            string output = whisper.StandardOutput.ReadToEnd();
+
+            whisper.WaitForExit();
+
+            try
+            {
+                textBox1.Text = File.ReadAllText(Application.StartupPath + "\\"+this.transcriptFolderName+"\\" + Path.GetFileNameWithoutExtension(this.filename) + ".txt");
+            }
+            catch (FileNotFoundException)
+            {
+                textBox1.Text = "Error: Transcript file couldn't be opened.";
+            }
+
+
+            Console.WriteLine("Current date (received from CMD):");
+           // Console.Write(output);
         }
 
         private void transcriptLanguage_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.lang = transcriptLanguage.SelectedValue.ToString();
         }
+
+        private void translateEnglish_Click(object sender, EventArgs e)
+        {
+            if (panel2.Height == 116) panel2.Height = 29;
+            else panel2.Height = 116;
+
+            textBox1.Text = "Translating... Please wait";
+
+            Process whisper = this.whisperSetup(true);
+            whisper.Start();
+
+            string output = whisper.StandardOutput.ReadToEnd();
+
+            whisper.WaitForExit();
+
+            try
+            {
+               textBox1.Text = File.ReadAllText(Application.StartupPath + "\\"+this.audioFolderName+"\\" + Path.GetFileNameWithoutExtension(this.filename) + ".txt");
+            }
+            catch (FileNotFoundException)
+            {
+                textBox1.Text = "Error: Translated file couldn't be created.";
+            }
+
+            File.WriteAllText(Application.StartupPath + "\\"+this.translateFolderName+"\\TR_" + Path.GetFileNameWithoutExtension(this.filename) + ".txt", 
+                                output);
+        }
+
+        private Process whisperSetup(bool translate = false)
+        {
+            ProcessStartInfo processStartInfo = new ProcessStartInfo();
+
+            processStartInfo.FileName = Application.StartupPath + "\\main.exe";
+            processStartInfo.Arguments = this.whisperArgsSetup(translate);
+            processStartInfo.CreateNoWindow = true;
+            processStartInfo.UseShellExecute = false;
+            processStartInfo.RedirectStandardOutput = true;
+
+            Process process = new Process();
+            process.StartInfo = processStartInfo;
+
+            return process;
+        }
+
+        private string whisperArgsSetup(bool translate)
+        {
+            string args = " -m " + Application.StartupPath + "\\models\\" + this.nn_model + (this.lang == "en" ? ".en" : "") + ".bin" +
+                          " -f " + Application.StartupPath + "\\"+this.audioFolderName+"\\" + this.filename +
+                          (transcriptLanguage.SelectedIndex == 0 ? "" : " -l " + this.lang) +
+                          " "+ (this.file_type == ".txt" ? "-otxt " : "-otxt " + this.file_type)+
+                          " -of " + Application.StartupPath + "\\" + transcriptFolderName + "\\" + Path.GetFileNameWithoutExtension(this.filename);    
+            return args;
+        } 
     }
 }
