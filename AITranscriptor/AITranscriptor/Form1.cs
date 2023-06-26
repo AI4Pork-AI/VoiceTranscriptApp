@@ -372,17 +372,19 @@ namespace AITranscriptor
 
             whisper.WaitForExit();
 
+            File.WriteAllText(Application.StartupPath + "\\" + this.translateFolderName + "\\TR_" + Path.GetFileNameWithoutExtension(this.filename) + ".txt",
+                                output);
+
             try
             {
-               textBox1.Text = File.ReadAllText(Application.StartupPath + "\\"+this.audioFolderName+"\\" + Path.GetFileNameWithoutExtension(this.filename) + ".txt");
+               textBox1.Text = File.ReadAllText(Application.StartupPath + "\\"+this.translateFolderName + "\\TR_" + Path.GetFileNameWithoutExtension(this.filename) + ".txt");
             }
             catch (FileNotFoundException)
             {
                 textBox1.Text = "Error: Translated file couldn't be created.";
             }
 
-            File.WriteAllText(Application.StartupPath + "\\"+this.translateFolderName+"\\TR_" + Path.GetFileNameWithoutExtension(this.filename) + ".txt", 
-                                output);
+            
         }
 
         private Process whisperSetup(bool translate = false)
@@ -407,7 +409,8 @@ namespace AITranscriptor
                           " -f " + Application.StartupPath + "\\"+this.audioFolderName+"\\" + this.filename +
                           (transcriptLanguage.SelectedIndex == 0 ? "" : " -l " + this.lang) +
                           " "+ (this.file_type == ".txt" ? "-otxt " : "-otxt " + this.file_type)+
-                          " -of " + Application.StartupPath + "\\" + transcriptFolderName + "\\" + Path.GetFileNameWithoutExtension(this.filename);    
+                          " -of " + Application.StartupPath + "\\" + transcriptFolderName + "\\" + Path.GetFileNameWithoutExtension(this.filename) + 
+                          (translate ? " -tr " : "");    
             return args;
         } 
     }
