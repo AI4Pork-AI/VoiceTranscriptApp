@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -15,6 +16,11 @@ namespace AITranscriptor
 {
     public partial class Form_Transctiptor : Form
     {
+        private object syncGate = new object();
+        private Process whisper;
+        private StringBuilder output = new StringBuilder();
+        private bool outputChanged;
+
         string nn_model, file_type, lang, filename;
         string audioFolderName = "audio";
         string transcriptFolderName = "transcripts";
@@ -309,6 +315,37 @@ namespace AITranscriptor
             Process.Start(Application.StartupPath + "\\"+this.audioFolderName+"");
         }
 
+        private void OnOutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            lock (syncGate)
+            {
+                if (sender != whisper) return;
+                output.AppendLine(e.Data);
+                if (outputChanged) return;
+                outputChanged = true;
+                BeginInvoke(new Action(OnOutputChanged));
+            }
+        }
+
+        private void OnOutputChanged()
+        {
+            lock (syncGate)
+            {
+                textBox1.Text = output.ToString();
+                outputChanged = false;
+            }
+        }
+
+        private void OnProcessExited(object sender, EventArgs e)
+        {
+            lock (syncGate)
+            {
+                if (sender != whisper) return;
+                whisper.Dispose();
+                whisper = null;
+            }
+        }
+
         private void panel2_Click(object sender, EventArgs e)
         {
             if (panel2.Height == 116) panel2.Height = 29;
@@ -330,27 +367,25 @@ namespace AITranscriptor
 
         private void transcript_Click(object sender, EventArgs e)
         {
-            Process whisper = this.whisperSetup(false);
-            whisper.Start();
+            if(this.filename != "") { 
 
-            textBox1.Text = "Transcripting audio... Please wait";
+                lock(syncGate)
+                {
+                    if (this.whisper != null) return;
+                }
+                output.Clear();
+                outputChanged = false;
+                textBox1.Text = "";
 
-            string output = whisper.StandardOutput.ReadToEnd();
+                this.whisper = this.whisperSetup(false);
 
-            whisper.WaitForExit();
+                this.whisper.OutputDataReceived += OnOutputDataReceived;
+                this.whisper.Exited += OnProcessExited;
 
-            try
-            {
-                textBox1.Text = File.ReadAllText(Application.StartupPath + "\\"+this.transcriptFolderName+"\\" + Path.GetFileNameWithoutExtension(this.filename) + ".txt");
+                this.whisper.Start();
+
+                this.whisper.BeginOutputReadLine();
             }
-            catch (FileNotFoundException)
-            {
-                textBox1.Text = "Error: Transcript file couldn't be opened.";
-            }
-
-
-            Console.WriteLine("Current date (received from CMD):");
-           // Console.Write(output);
         }
 
         private void transcriptLanguage_SelectedIndexChanged(object sender, EventArgs e)
