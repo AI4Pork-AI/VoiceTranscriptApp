@@ -47,8 +47,13 @@
             this.transcript = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.loadAudio = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.timestampsNo = new System.Windows.Forms.RadioButton();
+            this.timestampsYes = new System.Windows.Forms.RadioButton();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // translateEnglish
@@ -104,6 +109,7 @@
             this.textBox1.Location = new System.Drawing.Point(12, 124);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBox1.Size = new System.Drawing.Size(776, 314);
             this.textBox1.TabIndex = 3;
             // 
@@ -248,7 +254,7 @@
             // transcript
             // 
             this.transcript.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.transcript.Location = new System.Drawing.Point(409, 86);
+            this.transcript.Location = new System.Drawing.Point(497, 86);
             this.transcript.Name = "transcript";
             this.transcript.Size = new System.Drawing.Size(101, 30);
             this.transcript.TabIndex = 14;
@@ -277,11 +283,54 @@
             this.loadAudio.UseVisualStyleBackColor = true;
             this.loadAudio.Click += new System.EventHandler(this.loadAudio_Click);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(391, 74);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(92, 16);
+            this.label5.TabIndex = 17;
+            this.label5.Text = "Timestamps";
+            // 
+            // timestampsNo
+            // 
+            this.timestampsNo.AutoSize = true;
+            this.timestampsNo.Location = new System.Drawing.Point(52, 3);
+            this.timestampsNo.Name = "timestampsNo";
+            this.timestampsNo.Size = new System.Drawing.Size(39, 17);
+            this.timestampsNo.TabIndex = 19;
+            this.timestampsNo.Text = "No";
+            this.timestampsNo.UseVisualStyleBackColor = true;
+            // 
+            // timestampsYes
+            // 
+            this.timestampsYes.AutoSize = true;
+            this.timestampsYes.Checked = true;
+            this.timestampsYes.Location = new System.Drawing.Point(3, 3);
+            this.timestampsYes.Name = "timestampsYes";
+            this.timestampsYes.Size = new System.Drawing.Size(43, 17);
+            this.timestampsYes.TabIndex = 18;
+            this.timestampsYes.TabStop = true;
+            this.timestampsYes.Text = "Yes";
+            this.timestampsYes.UseVisualStyleBackColor = true;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.timestampsNo);
+            this.panel3.Controls.Add(this.timestampsYes);
+            this.panel3.Location = new System.Drawing.Point(392, 92);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(92, 21);
+            this.panel3.TabIndex = 21;
+            // 
             // Form_Transctiptor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.panel3);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.loadAudio);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.transcript);
@@ -303,6 +352,8 @@
             this.Click += new System.EventHandler(this.Form_Transctiptor_Click);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -329,6 +380,10 @@
         private System.Windows.Forms.Button transcript;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button loadAudio;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.RadioButton timestampsNo;
+        private System.Windows.Forms.RadioButton timestampsYes;
+        private System.Windows.Forms.Panel panel3;
     }
 }
 

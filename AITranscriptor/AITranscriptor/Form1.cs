@@ -136,14 +136,15 @@ namespace AITranscriptor
         public Form_Transctiptor()
         {
             InitializeComponent();
+
             transcriptLanguage.DataSource = new BindingSource(g_lang, null);
             transcriptLanguage.DisplayMember = "Value";
             transcriptLanguage.ValueMember = "Key";
 
             //Create directories if doesn't exist
-            Directory.CreateDirectory(Application.StartupPath + "\\"+this.audioFolderName+"\\");
+            Directory.CreateDirectory(Application.StartupPath + "\\" + this.audioFolderName+"\\");
             Directory.CreateDirectory(Application.StartupPath + "\\" + this.modelFolderName + "\\");
-            Directory.CreateDirectory(Application.StartupPath + "\\"+this.translateFolderName+"\\");
+            Directory.CreateDirectory(Application.StartupPath + "\\" + this.translateFolderName+"\\");
             Directory.CreateDirectory(Application.StartupPath + "\\" + this.transcriptFolderName + "\\");
 
             //If the models are present in their folder, add the option to select them
@@ -176,7 +177,7 @@ namespace AITranscriptor
                           " -ac 1" +
                           " -c:a pcm_s16le \"" +
                           Application.StartupPath + "\\"+this.audioFolderName+"\\" + Path.GetFileNameWithoutExtension(this.filename) + ".wav\"";
-            textBox1.Text = args; //DEBUG
+
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
 
             processStartInfo.FileName = "\"" + Application.StartupPath + "\\ffmpeg.exe\"";
@@ -231,8 +232,7 @@ namespace AITranscriptor
             // Kill opened processes
             if (p_tracker.HasProcess("whisper"))
             {
-                Process whisper2 = Process.GetProcessById(p_tracker.Processes.FirstOrDefault(x => x.Value == "whisper").Key);
-                whisper2.Kill();
+                this.whisper.Kill();
             }
 
             if (p_tracker.HasProcess("ffmpeg"))
@@ -392,7 +392,7 @@ namespace AITranscriptor
 
         private void testButton_Click(object sender, EventArgs e)
         {
-            string args = this.whisperArgsSetup(false);
+            string args = this.whisperArgsSetup(false, false);
             if (textBox1.Text == "")
             {
                 textBox1.Text = "\"" + Application.StartupPath + "\\main.exe\"" + args;
@@ -415,7 +415,7 @@ namespace AITranscriptor
                 outputChanged = false;
                 textBox1.Text = "";
 
-                this.whisper = this.whisperSetup(false);
+                this.whisper = this.whisperSetup(false, timestampsNo.Checked);
 
                 this.whisper.OutputDataReceived += OnOutputDataReceived;
                 this.whisper.Exited += OnProcessExited;
@@ -461,15 +461,16 @@ namespace AITranscriptor
             
         }
 
-        private Process whisperSetup(bool translate = false)
+        private Process whisperSetup(bool translate = false, bool no_timestamps = true)
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
 
             processStartInfo.FileName = "\"" + Application.StartupPath + "\\main.exe\"";
-            processStartInfo.Arguments = this.whisperArgsSetup(translate);
+            processStartInfo.Arguments = this.whisperArgsSetup(translate, no_timestamps);
             processStartInfo.CreateNoWindow = true;
             processStartInfo.UseShellExecute = false;
             processStartInfo.RedirectStandardOutput = true;
+            processStartInfo.StandardOutputEncoding = Encoding.UTF8;
 
             Process process = new Process();
             process.StartInfo = processStartInfo;
@@ -477,13 +478,14 @@ namespace AITranscriptor
             return process;
         }
 
-        private string whisperArgsSetup(bool translate)
+        private string whisperArgsSetup(bool translate, bool no_timestamps)
         {
             string args = " -m \"" + Application.StartupPath + "\\models\\" + this.nn_model + (this.lang == "en" ? ".en" : "") + ".bin\"" +
                           " -f \"" + Application.StartupPath + "\\"+this.audioFolderName+"\\" + this.filename + "\"" +
                           (transcriptLanguage.SelectedIndex == 0 ? "" : " -l " + this.lang) +
                           " "+ (this.file_type == ".txt" ? "-otxt " : "-otxt " + this.file_type)+
                           " -of \"" + Application.StartupPath + "\\" + transcriptFolderName + "\\" + Path.GetFileNameWithoutExtension(this.filename) + "\"" +
+                          (no_timestamps ? " -nt" : "") +
                           (translate ? " -tr " : "");    
             return args;
         } 
