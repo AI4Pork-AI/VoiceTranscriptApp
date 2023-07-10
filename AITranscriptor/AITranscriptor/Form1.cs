@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,12 +18,14 @@ namespace AITranscriptor
     public partial class Form_Transctiptor : Form
     {
         private object syncGate = new object();
+        private ProcessTracker p_tracker = new ProcessTracker();
         private Process whisper;
         private StringBuilder output = new StringBuilder();
         private bool outputChanged;
 
         string nn_model, file_type, lang, filename;
         string audioFolderName = "audio";
+        string modelFolderName = "models";
         string transcriptFolderName = "transcripts";
         string translateFolderName = "translations";
 
@@ -137,28 +140,46 @@ namespace AITranscriptor
             transcriptLanguage.DisplayMember = "Value";
             transcriptLanguage.ValueMember = "Key";
 
-            modelType.SelectedIndex = 1;
-            fileType.SelectedIndex = 0;
-            transcriptLanguage.SelectedIndex = 0;
-
             //Create directories if doesn't exist
             Directory.CreateDirectory(Application.StartupPath + "\\"+this.audioFolderName+"\\");
+            Directory.CreateDirectory(Application.StartupPath + "\\" + this.modelFolderName + "\\");
             Directory.CreateDirectory(Application.StartupPath + "\\"+this.translateFolderName+"\\");
             Directory.CreateDirectory(Application.StartupPath + "\\" + this.transcriptFolderName + "\\");
+
+            //If the models are present in their folder, add the option to select them
+            List<string> models = new List<string>() { };
+
+            if (File.Exists(Application.StartupPath + "\\" + this.modelFolderName + "\\ggml-tiny.bin") ||
+                File.Exists(Application.StartupPath + "\\" + this.modelFolderName + "\\ggml-tiny_en.bin")) models.Add("Tiny");
+            if (File.Exists(Application.StartupPath + "\\" + this.modelFolderName + "\\ggml-base.bin") ||
+                File.Exists(Application.StartupPath + "\\" + this.modelFolderName + "\\ggml-base_en.bin")) models.Add("Base");
+            if (File.Exists(Application.StartupPath + "\\" + this.modelFolderName + "\\ggml-small.bin") ||
+                File.Exists(Application.StartupPath + "\\" + this.modelFolderName + "\\ggml-small_en.bin")) models.Add("Small");
+            if (File.Exists(Application.StartupPath + "\\" + this.modelFolderName + "\\ggml-medium.bin") ||
+                File.Exists(Application.StartupPath + "\\" + this.modelFolderName + "\\ggml-medium_en.bin")) models.Add("Medium");
+            if (File.Exists(Application.StartupPath + "\\" + this.modelFolderName + "\\ggml-large.bin") ||
+                File.Exists(Application.StartupPath + "\\" + this.modelFolderName + "\\ggml-large_en.bin")) models.Add("High");
+
+            modelType.DataSource = models;
+
+            if(models.Any()) modelType.SelectedIndex = 0;
+
+            fileType.SelectedIndex = 0;
+            transcriptLanguage.SelectedIndex = 0;
         }
 
         private Process convertFile()
         {
-            //ffmpeg - i input.mp3 - ar 16000 - ac 1 - c:a pcm_s16le output.wav
-            string args = "-i " + Application.StartupPath + "\\"+this.audioFolderName+"\\" + this.filename +
+            //ffmpeg -i input.mp3 -ar 16000 -ac 1 -c:a pcm_s16le output.wav
+            string args = "-i \"" + Application.StartupPath + "\\"+this.audioFolderName+"\\" + this.filename + "\"" +
                           " -ar 16000" +
                           " -ac 1" +
-                          " -c:a pcm_s16le " +
-                          Application.StartupPath + "\\"+this.audioFolderName+"\\" + Path.GetFileNameWithoutExtension(this.filename) + ".wav";
-
+                          " -c:a pcm_s16le \"" +
+                          Application.StartupPath + "\\"+this.audioFolderName+"\\" + Path.GetFileNameWithoutExtension(this.filename) + ".wav\"";
+            textBox1.Text = args; //DEBUG
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
 
-            processStartInfo.FileName = Application.StartupPath + "\\ffmpeg.exe";
+            processStartInfo.FileName = "\"" + Application.StartupPath + "\\ffmpeg.exe\"";
             processStartInfo.Arguments = args;
             processStartInfo.CreateNoWindow = true;
             processStartInfo.UseShellExecute = false;
@@ -205,6 +226,22 @@ namespace AITranscriptor
 
         }
 
+        private void Form_Transctiptor_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            // Kill opened processes
+            if (p_tracker.HasProcess("whisper"))
+            {
+                Process whisper2 = Process.GetProcessById(p_tracker.Processes.FirstOrDefault(x => x.Value == "whisper").Key);
+                whisper2.Kill();
+            }
+
+            if (p_tracker.HasProcess("ffmpeg"))
+            {
+                Process ffmpeg = Process.GetProcessById(p_tracker.Processes.FirstOrDefault(x => x.Value == "ffmpeg").Key);
+                ffmpeg.Kill();
+            }
+        }
+
         private void Form_Transctiptor_Click(object sender, EventArgs e)
         {
             if (panel2.Height == 116) panel2.Height = 29;
@@ -230,6 +267,7 @@ namespace AITranscriptor
                         {
                             Process ffmpeg = this.convertFile();
                             ffmpeg.Start();
+                            p_tracker.AddProcess(ffmpeg, "ffmpeg");
                             string output = ffmpeg.StandardOutput.ReadToEnd();
                             //textBox1.Text = "Converting file into .wav... Please wait"; //TODO: Please wait
                             ffmpeg.WaitForExit();
@@ -312,7 +350,7 @@ namespace AITranscriptor
         {
             if (panel2.Height == 116) panel2.Height = 29;
             else panel2.Height = 116;
-            Process.Start(Application.StartupPath + "\\"+this.audioFolderName+"");
+            Process.Start("\"" + Application.StartupPath + "\\"+this.audioFolderName+"\"");
         }
 
         private void OnOutputDataReceived(object sender, DataReceivedEventArgs e)
@@ -357,7 +395,7 @@ namespace AITranscriptor
             string args = this.whisperArgsSetup(false);
             if (textBox1.Text == "")
             {
-                textBox1.Text = Application.StartupPath + "\\main.exe" + args;
+                textBox1.Text = "\"" + Application.StartupPath + "\\main.exe\"" + args;
             }
             else
             {
@@ -402,17 +440,18 @@ namespace AITranscriptor
 
             Process whisper = this.whisperSetup(true);
             whisper.Start();
+            p_tracker.AddProcess(whisper, "whisper");
 
             string output = whisper.StandardOutput.ReadToEnd();
 
             whisper.WaitForExit();
 
-            File.WriteAllText(Application.StartupPath + "\\" + this.translateFolderName + "\\TR_" + Path.GetFileNameWithoutExtension(this.filename) + ".txt",
+            File.WriteAllText("\"" + Application.StartupPath + "\\" + this.translateFolderName + "\\TR_" + Path.GetFileNameWithoutExtension(this.filename) + ".txt\"",
                                 output);
 
             try
             {
-               textBox1.Text = File.ReadAllText(Application.StartupPath + "\\"+this.translateFolderName + "\\TR_" + Path.GetFileNameWithoutExtension(this.filename) + ".txt");
+               textBox1.Text = File.ReadAllText("\"" + Application.StartupPath + "\\"+this.translateFolderName + "\\TR_" + Path.GetFileNameWithoutExtension(this.filename) + ".txt\"");
             }
             catch (FileNotFoundException)
             {
@@ -426,7 +465,7 @@ namespace AITranscriptor
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
 
-            processStartInfo.FileName = Application.StartupPath + "\\main.exe";
+            processStartInfo.FileName = "\"" + Application.StartupPath + "\\main.exe\"";
             processStartInfo.Arguments = this.whisperArgsSetup(translate);
             processStartInfo.CreateNoWindow = true;
             processStartInfo.UseShellExecute = false;
@@ -440,11 +479,11 @@ namespace AITranscriptor
 
         private string whisperArgsSetup(bool translate)
         {
-            string args = " -m " + Application.StartupPath + "\\models\\" + this.nn_model + (this.lang == "en" ? ".en" : "") + ".bin" +
-                          " -f " + Application.StartupPath + "\\"+this.audioFolderName+"\\" + this.filename +
+            string args = " -m \"" + Application.StartupPath + "\\models\\" + this.nn_model + (this.lang == "en" ? ".en" : "") + ".bin\"" +
+                          " -f \"" + Application.StartupPath + "\\"+this.audioFolderName+"\\" + this.filename + "\"" +
                           (transcriptLanguage.SelectedIndex == 0 ? "" : " -l " + this.lang) +
                           " "+ (this.file_type == ".txt" ? "-otxt " : "-otxt " + this.file_type)+
-                          " -of " + Application.StartupPath + "\\" + transcriptFolderName + "\\" + Path.GetFileNameWithoutExtension(this.filename) + 
+                          " -of \"" + Application.StartupPath + "\\" + transcriptFolderName + "\\" + Path.GetFileNameWithoutExtension(this.filename) + "\"" +
                           (translate ? " -tr " : "");    
             return args;
         } 

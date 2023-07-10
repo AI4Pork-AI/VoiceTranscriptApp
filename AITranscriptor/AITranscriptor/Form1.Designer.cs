@@ -185,12 +185,6 @@
             // modelType
             // 
             this.modelType.FormattingEnabled = true;
-            this.modelType.Items.AddRange(new object[] {
-            "Tiny",
-            "Base",
-            "Small",
-            "Medium ",
-            "High"});
             this.modelType.Location = new System.Drawing.Point(14, 93);
             this.modelType.Name = "modelType";
             this.modelType.Size = new System.Drawing.Size(121, 21);
@@ -304,6 +298,7 @@
             this.Controls.Add(this.textBox1);
             this.Name = "Form_Transctiptor";
             this.Text = "Form1";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form_Transctiptor_FormClosed);
             this.Load += new System.EventHandler(this.Form);
             this.Click += new System.EventHandler(this.Form_Transctiptor_Click);
             this.panel1.ResumeLayout(false);
