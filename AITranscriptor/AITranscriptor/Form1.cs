@@ -176,10 +176,10 @@ namespace AITranscriptor
         /// This function creates a process that converts any audio to .wav format. It requires the ffmpeg application.
         /// </summary>
         /// <returns>Ffmpeg application instance</returns>
-        private Process convertFile()
+        private Process convertFile(string file_path_and_name)
         {
             //ffmpeg -i input.mp3 -ar 16000 -ac 1 -c:a pcm_s16le output.wav
-            string args = "-i \"" + Application.StartupPath + "\\"+this.audioFolderName+"\\" + this.filename + "\"" +
+            string args = "-i \"" + file_path_and_name + "\"" +
                           " -ar 16000" +
                           " -ac 1" +
                           " -c:a pcm_s16le \"" +
@@ -195,6 +195,9 @@ namespace AITranscriptor
 
             Process process = new Process();
             process.StartInfo = processStartInfo;
+
+            this.textBox1.Text = "\"" + Application.StartupPath + "\\ffmpeg.exe\"" + " " + args; //Debug
+
             return process;
         }
 
@@ -244,7 +247,9 @@ namespace AITranscriptor
             // Kill opened processes
             if (p_tracker.HasProcess("whisper"))
             {
-                this.whisper.Kill();
+                Process whisper2 = Process.GetProcessById(p_tracker.Processes.FirstOrDefault(x => x.Value == "whisper").Key);
+                whisper2.Kill(); //TODO: Access denied
+                //this.whisper.Kill();
             }
 
             if (p_tracker.HasProcess("ffmpeg"))
@@ -269,6 +274,7 @@ namespace AITranscriptor
             if (result == DialogResult.OK) // Test result.
             {
                 string file = openFileDialog.FileName;
+                
                 try
                 {
                     this.filename = openFileDialog.SafeFileName;
@@ -278,7 +284,7 @@ namespace AITranscriptor
                     {
                         if (!File.Exists(Application.StartupPath + "\\"+this.audioFolderName+"\\" + Path.GetFileNameWithoutExtension(this.filename) + ".wav"))
                         {
-                            Process ffmpeg = this.convertFile();
+                            Process ffmpeg = this.convertFile(file);
                             ffmpeg.Start();
                             p_tracker.AddProcess(ffmpeg, "ffmpeg");
                             string output = ffmpeg.StandardOutput.ReadToEnd();
@@ -450,7 +456,7 @@ namespace AITranscriptor
                 outputChanged = false;
                 textBox1.Text = "";
 
-                if (p_tracker.HasProcess("whisper")) this.whisper.Kill();
+                //if (p_tracker.HasProcess("whisper")) this.whisper.Kill(); //TODO: Check
 
                 this.whisper = this.whisperSetup(false, timestampsNo.Checked);
 
