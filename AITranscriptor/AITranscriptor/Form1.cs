@@ -242,11 +242,6 @@ namespace AITranscriptor
             }
         }
 
-        private void Form_Transctiptor_Click(object sender, EventArgs e)
-        {
-            if (panel2.Height == 116) panel2.Height = 29;
-        }
-
         private void loadAudio_Click(object sender, EventArgs e)
         {
             string ext;
@@ -288,11 +283,8 @@ namespace AITranscriptor
             Console.WriteLine(result); // <-- For debugging use.
         }
 
-        private void loadTranscript_Click(object sender, EventArgs e)
+        private void loadTextFile_Click(object sender, EventArgs e)
         {
-            if (panel2.Height == 116) panel2.Height = 29;
-            else panel2.Height = 116;
-
             int size = -1;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             DialogResult result = openFileDialog.ShowDialog(); // Show the dialog.
@@ -301,7 +293,7 @@ namespace AITranscriptor
                 string file = openFileDialog.FileName;
                 try
                 {
-                    string text = File.ReadAllText(file);
+                    string text = File.ReadAllText(file, Encoding.UTF8);
                     size = text.Length;
                     label1.Text = openFileDialog.SafeFileName;
                     textBox1.Text = text;
@@ -312,12 +304,6 @@ namespace AITranscriptor
             }
             Console.WriteLine(size); // <-- Shows file size in debugging mode.
             Console.WriteLine(result); // <-- For debugging use.
-        }
-
-        private void menu_button_Click(object sender, EventArgs e)
-        {
-            if (panel2.Height == 116) panel2.Height = 29;
-            else panel2.Height = 116;
         }
 
         private void modelType_SelectedIndexChanged(object sender, EventArgs e)
@@ -346,10 +332,8 @@ namespace AITranscriptor
             }
         }
 
-        private void openTranscript_Click(object sender, EventArgs e)
+        private void openAppFolder_Click(object sender, EventArgs e)
         {
-            if (panel2.Height == 116) panel2.Height = 29;
-            else panel2.Height = 116;
             Process.Start("\"" + Application.StartupPath + "\\"+this.audioFolderName+"\"");
         }
 
@@ -384,12 +368,6 @@ namespace AITranscriptor
             }
         }
 
-        private void panel2_Click(object sender, EventArgs e)
-        {
-            if (panel2.Height == 116) panel2.Height = 29;
-            else panel2.Height = 116;
-        }
-
         private void testButton_Click(object sender, EventArgs e)
         {
             string args = this.whisperArgsSetup(false, false);
@@ -415,11 +393,14 @@ namespace AITranscriptor
                 outputChanged = false;
                 textBox1.Text = "";
 
+                if (p_tracker.HasProcess("whisper")) this.whisper.Kill();
+
                 this.whisper = this.whisperSetup(false, timestampsNo.Checked);
 
                 this.whisper.OutputDataReceived += OnOutputDataReceived;
                 this.whisper.Exited += OnProcessExited;
 
+  
                 this.whisper.Start();
 
                 this.whisper.BeginOutputReadLine();
@@ -433,12 +414,12 @@ namespace AITranscriptor
 
         private void translateEnglish_Click(object sender, EventArgs e)
         {
-            if (panel2.Height == 116) panel2.Height = 29;
-            else panel2.Height = 116;
-
             textBox1.Text = "Translating... Please wait";
 
+            if (p_tracker.HasProcess("whisper")) this.whisper.Kill();
+
             Process whisper = this.whisperSetup(true);
+
             whisper.Start();
             p_tracker.AddProcess(whisper, "whisper");
 
