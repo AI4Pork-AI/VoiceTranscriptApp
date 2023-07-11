@@ -133,6 +133,9 @@ namespace AITranscriptor
             { "su",  "sundanese"},
         };
 
+        /// <summary>
+        /// Constructor of the form. It initializes its components.
+        /// </summary>
         public Form_Transctiptor()
         {
             InitializeComponent();
@@ -169,6 +172,10 @@ namespace AITranscriptor
             transcriptLanguage.SelectedIndex = 0;
         }
 
+        /// <summary>
+        /// This function creates a process that converts any audio to .wav format. It requires the ffmpeg application.
+        /// </summary>
+        /// <returns>Ffmpeg application instance</returns>
         private Process convertFile()
         {
             //ffmpeg -i input.mp3 -ar 16000 -ac 1 -c:a pcm_s16le output.wav
@@ -191,11 +198,11 @@ namespace AITranscriptor
             return process;
         }
 
-        private void exitButton_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
+        /// <summary>
+        /// Index changed control for the 'fileType' dropdown list. The function saves the correct whisper instance of the output filetype.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void fileType_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (fileType.SelectedIndex)
@@ -227,6 +234,11 @@ namespace AITranscriptor
 
         }
 
+        /// <summary>
+        /// Determines what to do when the form is closed. That is, kill all the running background applications (whisper and ffmpeg).
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form_Transctiptor_FormClosed(object sender, FormClosedEventArgs e)
         {
             // Kill opened processes
@@ -242,6 +254,12 @@ namespace AITranscriptor
             }
         }
 
+        /// <summary>
+        /// Control for the 'loadAudio' button. This function opens the file explorer and allows the user to select an audio file. 
+        /// Using the 'ffmpeg' app, the function converts the selected file to .wav format.        
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void loadAudio_Click(object sender, EventArgs e)
         {
             string ext;
@@ -283,6 +301,11 @@ namespace AITranscriptor
             Console.WriteLine(result); // <-- For debugging use.
         }
 
+        /// <summary>
+        /// Control for the button 'loadTextFile'. This function opens the file explorer and allows the user to select a text file which will be shown in the form.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void loadTextFile_Click(object sender, EventArgs e)
         {
             int size = -1;
@@ -306,6 +329,11 @@ namespace AITranscriptor
             Console.WriteLine(result); // <-- For debugging use.
         }
 
+        /// <summary>
+        /// Control for the 'modelType' dropdown list. When an accuracy level is selected, the function saves the proper model 'whisper' instruction.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void modelType_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (modelType.SelectedIndex)
@@ -332,11 +360,21 @@ namespace AITranscriptor
             }
         }
 
+        /// <summary>
+        /// Control for the 'openAppFolder' button. This function will open the app folder in the file explorer.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void openAppFolder_Click(object sender, EventArgs e)
         {
-            Process.Start("\"" + Application.StartupPath + "\\"+this.audioFolderName+"\"");
+            Process.Start("\"" + Application.StartupPath + "\"");
         }
 
+        /// <summary>
+        /// Function that controls the received 'whisper' output.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnOutputDataReceived(object sender, DataReceivedEventArgs e)
         {
             lock (syncGate)
@@ -349,6 +387,9 @@ namespace AITranscriptor
             }
         }
 
+        /// <summary>
+        /// This function prints the whisper output in the form.
+        /// </summary>
         private void OnOutputChanged()
         {
             lock (syncGate)
@@ -358,6 +399,11 @@ namespace AITranscriptor
             }
         }
 
+        /// <summary>
+        /// The function controls what to do when the whisper app finishes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnProcessExited(object sender, EventArgs e)
         {
             lock (syncGate)
@@ -368,6 +414,11 @@ namespace AITranscriptor
             }
         }
 
+        /// <summary>
+        /// Test button functionalities (for debugging purposes)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void testButton_Click(object sender, EventArgs e)
         {
             string args = this.whisperArgsSetup(false, false);
@@ -381,6 +432,12 @@ namespace AITranscriptor
             }
         }
 
+        /// <summary>
+        /// Control for the 'transcript' button. The function calls the 'whisper' app and proceed to transcribe the given audio with 
+        /// the given specifications in the form.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void transcript_Click(object sender, EventArgs e)
         {
             if(this.filename != "") { 
@@ -407,11 +464,23 @@ namespace AITranscriptor
             }
         }
 
+        /// <summary>
+        /// Control for the 'transcriptLanguage' dropdown list. This function saves the selected language.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void transcriptLanguage_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.lang = transcriptLanguage.SelectedValue.ToString();
         }
 
+        /// <summary>
+        /// Control for the button 'translateEnglish'. The function uses whisper app to translate the given audio to english. 
+        /// It also considers the parameters related to the audio, that is; the accuracy, the language, and the timestamps.
+        /// It creates an output file in the 'translations' folder with the origin with name 'TR_filename.txt'. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void translateEnglish_Click(object sender, EventArgs e)
         {
             textBox1.Text = "Translating... Please wait";
@@ -442,6 +511,12 @@ namespace AITranscriptor
             
         }
 
+        /// <summary>
+        /// This function sets the characteristics of the whisper app.
+        /// </summary>
+        /// <param name="translate"></param>
+        /// <param name="no_timestamps"></param>
+        /// <returns>Returns a ProcessStartInfo object containing all the characteristics of the whisper app.</returns>
         private Process whisperSetup(bool translate = false, bool no_timestamps = true)
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
@@ -459,6 +534,12 @@ namespace AITranscriptor
             return process;
         }
 
+        /// <summary>
+        /// This function sets the argumetns for the whisper app.
+        /// </summary>
+        /// <param name="translate"></param>
+        /// <param name="no_timestamps"></param>
+        /// <returns>Gives a string containing all the arguments of the whisper app.</returns>
         private string whisperArgsSetup(bool translate, bool no_timestamps)
         {
             string args = " -m \"" + Application.StartupPath + "\\models\\" + this.nn_model + (this.lang == "en" ? ".en" : "") + ".bin\"" +
