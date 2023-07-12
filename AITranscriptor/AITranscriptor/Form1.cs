@@ -244,18 +244,16 @@ namespace AITranscriptor
         /// <param name="e"></param>
         private void Form_Transctiptor_FormClosed(object sender, FormClosedEventArgs e)
         {
-            // Kill opened processes
+            // Close opened processes
             if (p_tracker.HasProcess("whisper"))
             {
-                Process whisper2 = Process.GetProcessById(p_tracker.Processes.FirstOrDefault(x => x.Value == "whisper").Key);
-                whisper2.Kill(); //TODO: Access denied
-                //this.whisper.Kill();
+                this.whisper.Close();
             }
 
             if (p_tracker.HasProcess("ffmpeg"))
             {
                 Process ffmpeg = Process.GetProcessById(p_tracker.Processes.FirstOrDefault(x => x.Value == "ffmpeg").Key);
-                ffmpeg.Kill();
+                ffmpeg.Close();
             }
         }
 
@@ -420,6 +418,22 @@ namespace AITranscriptor
             }
         }
 
+        private void stop_Click(object sender, EventArgs e)
+        {
+            this.whisper.Kill();
+            // Close opened processes
+            if (p_tracker.HasProcess("whisper"))
+            {
+                this.whisper.Close();
+            }
+
+            if (p_tracker.HasProcess("ffmpeg"))
+            {
+                Process ffmpeg = Process.GetProcessById(p_tracker.Processes.FirstOrDefault(x => x.Value == "ffmpeg").Key);
+                ffmpeg.Close();
+            }
+        }
+
         /// <summary>
         /// Test button functionalities (for debugging purposes)
         /// </summary>
@@ -446,9 +460,8 @@ namespace AITranscriptor
         /// <param name="e"></param>
         private void transcript_Click(object sender, EventArgs e)
         {
-            if(this.filename != "") { 
-
-                lock(syncGate)
+            if(this.filename != "") {
+                lock (syncGate)
                 {
                     if (this.whisper != null) return;
                 }
@@ -456,7 +469,7 @@ namespace AITranscriptor
                 outputChanged = false;
                 textBox1.Text = "";
 
-                //if (p_tracker.HasProcess("whisper")) this.whisper.Kill(); //TODO: Check
+                //if (p_tracker.HasProcess("whisper")) this.whisper.Kill(); //TODO: Check 
 
                 this.whisper = this.whisperSetup(false, timestampsNo.Checked);
 
@@ -491,7 +504,7 @@ namespace AITranscriptor
         {
             textBox1.Text = "Translating... Please wait";
 
-            if (p_tracker.HasProcess("whisper")) this.whisper.Kill();
+            if (p_tracker.HasProcess("whisper")) this.whisper.Close();
 
             Process whisper = this.whisperSetup(true);
 

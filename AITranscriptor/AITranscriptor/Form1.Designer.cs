@@ -47,6 +47,7 @@
             this.timestampsNo = new System.Windows.Forms.RadioButton();
             this.timestampsYes = new System.Windows.Forms.RadioButton();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.stop = new System.Windows.Forms.Button();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -261,11 +262,23 @@
             this.panel3.Size = new System.Drawing.Size(92, 21);
             this.panel3.TabIndex = 21;
             // 
+            // stop
+            // 
+            this.stop.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stop.Location = new System.Drawing.Point(604, 86);
+            this.stop.Name = "stop";
+            this.stop.Size = new System.Drawing.Size(55, 30);
+            this.stop.TabIndex = 22;
+            this.stop.Text = "Stop";
+            this.stop.UseVisualStyleBackColor = true;
+            this.stop.Click += new System.EventHandler(this.stop_Click);
+            // 
             // Form_Transctiptor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.stop);
             this.Controls.Add(this.translateEnglish);
             this.Controls.Add(this.loadTextFile);
             this.Controls.Add(this.openAppFolder);
@@ -315,6 +328,7 @@
         private System.Windows.Forms.RadioButton timestampsNo;
         private System.Windows.Forms.RadioButton timestampsYes;
         private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Button stop;
     }
 }
 
