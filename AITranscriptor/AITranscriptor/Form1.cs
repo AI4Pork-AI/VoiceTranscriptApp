@@ -420,13 +420,8 @@ namespace AITranscriptor
 
         private void stop_Click(object sender, EventArgs e)
         {
-            this.whisper.Kill();
-            // Close opened processes
-            if (p_tracker.HasProcess("whisper"))
-            {
-                this.whisper.Close();
-            }
-
+            if (this.whisper != null) if (!this.whisper.HasExited) if (this.whisper != null) this.whisper.Kill();
+          
             if (p_tracker.HasProcess("ffmpeg"))
             {
                 Process ffmpeg = Process.GetProcessById(p_tracker.Processes.FirstOrDefault(x => x.Value == "ffmpeg").Key);
