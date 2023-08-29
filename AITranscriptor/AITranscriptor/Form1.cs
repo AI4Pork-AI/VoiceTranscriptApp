@@ -22,6 +22,7 @@ namespace AITranscriptor
         private Process whisper;
         private StringBuilder output = new StringBuilder();
         private bool outputChanged;
+        private bool translate = false;
 
         string nn_model, file_type, lang, filename;
         string audioFolderName = "audio";
@@ -170,6 +171,7 @@ namespace AITranscriptor
 
             fileType.SelectedIndex = 0;
             transcriptLanguage.SelectedIndex = 0;
+            statusBox.Text = "Ready";
         }
 
         /// <summary>
@@ -245,7 +247,7 @@ namespace AITranscriptor
         private void Form_Transctiptor_FormClosed(object sender, FormClosedEventArgs e)
         {
             // Close opened processes
-            if (p_tracker.HasProcess("whisper"))
+            if (this.whisper != null && !this.whisper.HasExited)
             {
                 this.whisper.Close();
             }
@@ -265,6 +267,7 @@ namespace AITranscriptor
         /// <param name="e"></param>
         private void loadAudio_Click(object sender, EventArgs e)
         {
+            statusBox.Text = "Loading...";
             string ext;
             int size = -1;
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -277,7 +280,6 @@ namespace AITranscriptor
                 {
                     this.filename = openFileDialog.SafeFileName;
                     ext = Path.GetExtension(this.filename);
-
                     if (ext != ".wav")
                     {
                         if (!File.Exists(Application.StartupPath + "\\"+this.audioFolderName+"\\" + Path.GetFileNameWithoutExtension(this.filename) + ".wav"))
@@ -301,6 +303,7 @@ namespace AITranscriptor
                 {
                 }
             }
+            statusBox.Text = "Ready";
             Console.WriteLine(size); // <-- Shows file size in debugging mode.
             Console.WriteLine(result); // <-- For debugging use.
         }
@@ -416,7 +419,6 @@ namespace AITranscriptor
                 whisper.Dispose();
                 whisper = null;
                 BeginInvoke(new Action(asyncWhisperExit));
-                MessageBox.Show("Process Finished");
             }
 
         }
@@ -428,11 +430,17 @@ namespace AITranscriptor
                 File.WriteAllText(Application.StartupPath + "\\" + this.transcriptFolderName + "\\" + Path.GetFileNameWithoutExtension(this.filename) + "_timestamps.txt",
                                   textBox1.Text);
             }
+
+            if (statusBox.Text != "Stopped") statusBox.Text = "Finished";
         }
 
         private void stopTranscript()
         {
-            if (this.whisper != null) if (!this.whisper.HasExited) if (this.whisper != null) this.whisper.Kill();
+            if (this.whisper != null) if (!this.whisper.HasExited) if (this.whisper != null)
+            {
+                statusBox.Text = "Stopped";
+                this.whisper.Kill();
+            }
 
             if (p_tracker.HasProcess("ffmpeg"))
             {
@@ -444,6 +452,7 @@ namespace AITranscriptor
         private void stop_Click(object sender, EventArgs e)
         {
             this.stopTranscript();
+            
         }
 
         /// <summary>
@@ -453,7 +462,7 @@ namespace AITranscriptor
         /// <param name="e"></param>
         private void testButton_Click(object sender, EventArgs e)
         {
-            string args = this.whisperArgsSetup(false, false);
+            string args = this.whisperArgsSetup(false);
             if (textBox1.Text == "")
             {
                 textBox1.Text = "\"" + Application.StartupPath + "\\main.exe\"" + args;
@@ -472,29 +481,7 @@ namespace AITranscriptor
         /// <param name="e"></param>
         private void transcript_Click(object sender, EventArgs e)
         {
-            this.stopTranscript(); // Stop previous transcription if exist.
-
-            if(this.filename != "") {
-                lock (syncGate)
-                {
-                    if (this.whisper != null) return;
-                }
-                output.Clear();
-                outputChanged = false;
-                textBox1.Text = "";
-
-                //if (p_tracker.HasProcess("whisper")) this.whisper.Kill(); //TODO: Check 
-
-                this.whisper = this.whisperSetup(false, timestampsNo.Checked);
-                this.whisper.EnableRaisingEvents = true;
-                this.whisper.OutputDataReceived += OnOutputDataReceived;
-                this.whisper.Exited += OnProcessExited;
-
-  
-                this.whisper.Start();
-
-                this.whisper.BeginOutputReadLine();
-            }
+            this.whisperStart(sender, e);
         }
 
         /// <summary>
@@ -516,33 +503,39 @@ namespace AITranscriptor
         /// <param name="e"></param>
         private void translateEnglish_Click(object sender, EventArgs e)
         {
-            textBox1.Text = "Translating... Please wait";
+            this.whisperStart(sender, e);
+        }
 
+        /// <summary>
+        /// Start whisper process
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="ebool"></param>
+        private void whisperStart(object sender, EventArgs ebool)
+        {
             this.stopTranscript(); // Stop previous transcription if exist.
 
-            this.whisper = this.whisperSetup(false, timestampsNo.Checked);
-            this.whisper.EnableRaisingEvents= true;
-
-            this.whisper.Start();
-            p_tracker.AddProcess(whisper, "whisper");
-
-            string output = whisper.StandardOutput.ReadToEnd();
-
-            whisper.WaitForExit();
-
-            File.WriteAllText(Application.StartupPath + "\\" + this.translateFolderName + "\\TR_" + Path.GetFileNameWithoutExtension(this.filename) + ".txt",
-                                output);
-
-            try
+            if (this.filename != "")
             {
-               textBox1.Text = File.ReadAllText(Application.StartupPath + "\\"+this.translateFolderName + "\\TR_" + Path.GetFileNameWithoutExtension(this.filename) + ".txt");
-            }
-            catch (FileNotFoundException)
-            {
-                textBox1.Text = "Error: Translated file couldn't be created.";
-            }
+                lock (syncGate)
+                {
+                    if (this.whisper != null) return;
+                }
+                output.Clear();
+                outputChanged = false;
+                textBox1.Text = "";
+                statusBox.Text = translate ? "Translating" : "Transcripting";
 
-            
+                this.whisper = this.whisperSetup(timestampsNo.Checked);
+                this.whisper.EnableRaisingEvents = true;
+                this.whisper.OutputDataReceived += OnOutputDataReceived;
+                this.whisper.Exited += OnProcessExited;
+
+
+                this.whisper.Start();
+
+                this.whisper.BeginOutputReadLine();
+            }
         }
 
         /// <summary>
@@ -551,12 +544,12 @@ namespace AITranscriptor
         /// <param name="translate"></param>
         /// <param name="no_timestamps"></param>
         /// <returns>Returns a ProcessStartInfo object containing all the characteristics of the whisper app.</returns>
-        private Process whisperSetup(bool translate = false, bool no_timestamps = true)
+        private Process whisperSetup(bool no_timestamps = true)
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
 
             processStartInfo.FileName = "\"" + Application.StartupPath + "\\main.exe\"";
-            processStartInfo.Arguments = this.whisperArgsSetup(translate, no_timestamps);
+            processStartInfo.Arguments = this.whisperArgsSetup(no_timestamps);
             processStartInfo.CreateNoWindow = true;
             processStartInfo.UseShellExecute = false;
             processStartInfo.RedirectStandardOutput = true;
@@ -574,15 +567,17 @@ namespace AITranscriptor
         /// <param name="translate"></param>
         /// <param name="no_timestamps"></param>
         /// <returns>Gives a string containing all the arguments of the whisper app.</returns>
-        private string whisperArgsSetup(bool translate, bool no_timestamps)
+        private string whisperArgsSetup(bool no_timestamps)
         {
             string args = " -m \"" + Application.StartupPath + "\\models\\" + this.nn_model + (this.lang == "en" ? ".en" : "") + ".bin\"" +
                           " -f \"" + Application.StartupPath + "\\"+this.audioFolderName+"\\" + this.filename + "\"" +
                           (transcriptLanguage.SelectedIndex == 0 ? "" : " -l " + this.lang) +
                           " "+ ("-otxt " + this.file_type)+
-                          " -of \"" + Application.StartupPath + "\\" + transcriptFolderName + "\\" + Path.GetFileNameWithoutExtension(this.filename) + "\"" +
+                          " -of \"" + Application.StartupPath + "\\" + (translate ? translateFolderName : transcriptFolderName) + "\\" + Path.GetFileNameWithoutExtension(this.filename) + "\"" +
                           (no_timestamps ? " -nt" : "") +
-                          (translate ? " -tr " : "");    
+                          (translate ? " -tr " : "");
+
+            this.translate = false;
             return args;
         } 
     }

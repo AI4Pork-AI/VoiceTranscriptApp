@@ -48,6 +48,8 @@
             this.timestampsYes = new System.Windows.Forms.RadioButton();
             this.panel3 = new System.Windows.Forms.Panel();
             this.stop = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.statusBox = new System.Windows.Forms.TextBox();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -118,7 +120,7 @@
             // testButton
             // 
             this.testButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.testButton.Location = new System.Drawing.Point(713, 80);
+            this.testButton.Location = new System.Drawing.Point(523, 32);
             this.testButton.Name = "testButton";
             this.testButton.Size = new System.Drawing.Size(75, 30);
             this.testButton.TabIndex = 5;
@@ -273,11 +275,35 @@
             this.stop.UseVisualStyleBackColor = true;
             this.stop.Click += new System.EventHandler(this.stop_Click);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
+            this.label6.Location = new System.Drawing.Point(702, 72);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(50, 16);
+            this.label6.TabIndex = 23;
+            this.label6.Text = "Status";
+            // 
+            // statusBox
+            // 
+            this.statusBox.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.statusBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.statusBox.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.statusBox.Location = new System.Drawing.Point(665, 88);
+            this.statusBox.Name = "statusBox";
+            this.statusBox.ReadOnly = true;
+            this.statusBox.Size = new System.Drawing.Size(123, 26);
+            this.statusBox.TabIndex = 24;
+            this.statusBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // Form_Transctiptor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.statusBox);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.stop);
             this.Controls.Add(this.translateEnglish);
             this.Controls.Add(this.loadTextFile);
@@ -329,6 +355,8 @@
         private System.Windows.Forms.RadioButton timestampsYes;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Button stop;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox statusBox;
     }
 }
 
