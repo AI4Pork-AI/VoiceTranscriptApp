@@ -415,18 +415,35 @@ namespace AITranscriptor
                 if (sender != whisper) return;
                 whisper.Dispose();
                 whisper = null;
+                BeginInvoke(new Action(asyncWhisperExit));
+                MessageBox.Show("Process Finished");
+            }
+
+        }
+
+        private void asyncWhisperExit()
+        {
+            if (!timestampsNo.Checked && this.file_type == "-otxt")
+            {
+                File.WriteAllText(Application.StartupPath + "\\" + this.transcriptFolderName + "\\" + Path.GetFileNameWithoutExtension(this.filename) + "_timestamps.txt",
+                                  textBox1.Text);
             }
         }
 
-        private void stop_Click(object sender, EventArgs e)
+        private void stopTranscript()
         {
             if (this.whisper != null) if (!this.whisper.HasExited) if (this.whisper != null) this.whisper.Kill();
-          
+
             if (p_tracker.HasProcess("ffmpeg"))
             {
                 Process ffmpeg = Process.GetProcessById(p_tracker.Processes.FirstOrDefault(x => x.Value == "ffmpeg").Key);
                 ffmpeg.Close();
             }
+        }
+
+        private void stop_Click(object sender, EventArgs e)
+        {
+            this.stopTranscript();
         }
 
         /// <summary>
@@ -455,6 +472,8 @@ namespace AITranscriptor
         /// <param name="e"></param>
         private void transcript_Click(object sender, EventArgs e)
         {
+            this.stopTranscript(); // Stop previous transcription if exist.
+
             if(this.filename != "") {
                 lock (syncGate)
                 {
@@ -467,7 +486,7 @@ namespace AITranscriptor
                 //if (p_tracker.HasProcess("whisper")) this.whisper.Kill(); //TODO: Check 
 
                 this.whisper = this.whisperSetup(false, timestampsNo.Checked);
-
+                this.whisper.EnableRaisingEvents = true;
                 this.whisper.OutputDataReceived += OnOutputDataReceived;
                 this.whisper.Exited += OnProcessExited;
 
@@ -499,23 +518,24 @@ namespace AITranscriptor
         {
             textBox1.Text = "Translating... Please wait";
 
-            if (p_tracker.HasProcess("whisper")) this.whisper.Close();
+            this.stopTranscript(); // Stop previous transcription if exist.
 
-            Process whisper = this.whisperSetup(true);
+            this.whisper = this.whisperSetup(false, timestampsNo.Checked);
+            this.whisper.EnableRaisingEvents= true;
 
-            whisper.Start();
+            this.whisper.Start();
             p_tracker.AddProcess(whisper, "whisper");
 
             string output = whisper.StandardOutput.ReadToEnd();
 
             whisper.WaitForExit();
 
-            File.WriteAllText("\"" + Application.StartupPath + "\\" + this.translateFolderName + "\\TR_" + Path.GetFileNameWithoutExtension(this.filename) + ".txt\"",
+            File.WriteAllText(Application.StartupPath + "\\" + this.translateFolderName + "\\TR_" + Path.GetFileNameWithoutExtension(this.filename) + ".txt",
                                 output);
 
             try
             {
-               textBox1.Text = File.ReadAllText("\"" + Application.StartupPath + "\\"+this.translateFolderName + "\\TR_" + Path.GetFileNameWithoutExtension(this.filename) + ".txt\"");
+               textBox1.Text = File.ReadAllText(Application.StartupPath + "\\"+this.translateFolderName + "\\TR_" + Path.GetFileNameWithoutExtension(this.filename) + ".txt");
             }
             catch (FileNotFoundException)
             {
@@ -559,7 +579,7 @@ namespace AITranscriptor
             string args = " -m \"" + Application.StartupPath + "\\models\\" + this.nn_model + (this.lang == "en" ? ".en" : "") + ".bin\"" +
                           " -f \"" + Application.StartupPath + "\\"+this.audioFolderName+"\\" + this.filename + "\"" +
                           (transcriptLanguage.SelectedIndex == 0 ? "" : " -l " + this.lang) +
-                          " "+ (this.file_type == ".txt" ? "-otxt " : "-otxt " + this.file_type)+
+                          " "+ ("-otxt " + this.file_type)+
                           " -of \"" + Application.StartupPath + "\\" + transcriptFolderName + "\\" + Path.GetFileNameWithoutExtension(this.filename) + "\"" +
                           (no_timestamps ? " -nt" : "") +
                           (translate ? " -tr " : "");    
