@@ -172,6 +172,9 @@ namespace AITranscriptor
             fileType.SelectedIndex = 0;
             transcriptLanguage.SelectedIndex = 0;
             statusBox.Text = "Ready";
+            transcript.Enabled = true;
+            translateEnglish.Enabled = true;
+            loadTextFile.Enabled = true;
         }
 
         /// <summary>
@@ -268,6 +271,9 @@ namespace AITranscriptor
         private void loadAudio_Click(object sender, EventArgs e)
         {
             statusBox.Text = "Loading...";
+            //transcript.Enabled = false;
+            //translateEnglish.Enabled = false;
+            //loadTextFile.Enabled = false;
             string ext;
             int size = -1;
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -304,6 +310,9 @@ namespace AITranscriptor
                 }
             }
             statusBox.Text = "Ready";
+            //transcript.Enabled = true;
+            //translateEnglish.Enabled = true;
+            //loadTextFile.Enabled = true;
             Console.WriteLine(size); // <-- Shows file size in debugging mode.
             Console.WriteLine(result); // <-- For debugging use.
         }
@@ -452,7 +461,9 @@ namespace AITranscriptor
         private void stop_Click(object sender, EventArgs e)
         {
             this.stopTranscript();
-            
+            //transcript.Enabled = true;
+            //translateEnglish.Enabled = true;
+            //loadTextFile.Enabled = true;
         }
 
         /// <summary>
@@ -525,6 +536,9 @@ namespace AITranscriptor
                 outputChanged = false;
                 textBox1.Text = "";
                 statusBox.Text = translate ? "Translating" : "Transcripting";
+                //transcript.Enabled = false;
+                //translateEnglish.Enabled = false;
+                //loadTextFile.Enabled = false;
 
                 this.whisper = this.whisperSetup(timestampsNo.Checked);
                 this.whisper.EnableRaisingEvents = true;
