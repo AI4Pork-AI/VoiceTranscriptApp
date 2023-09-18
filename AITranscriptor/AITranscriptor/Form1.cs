@@ -150,6 +150,7 @@ namespace AITranscriptor
             Directory.CreateDirectory(Application.StartupPath + "\\" + this.modelFolderName + "\\");
             Directory.CreateDirectory(Application.StartupPath + "\\" + this.translateFolderName+"\\");
             Directory.CreateDirectory(Application.StartupPath + "\\" + this.transcriptFolderName + "\\");
+            Directory.CreateDirectory(Application.StartupPath + "\\dll\\");
 
             //If the models are present in their folder, add the option to select them
             List<string> models = new List<string>() { };
@@ -192,7 +193,7 @@ namespace AITranscriptor
 
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
 
-            processStartInfo.FileName = "\"" + Application.StartupPath + "\\ffmpeg.exe\"";
+            processStartInfo.FileName = "\"" + Application.StartupPath + "\\dll\\ffmpeg.exe\"";
             processStartInfo.Arguments = args;
             processStartInfo.CreateNoWindow = true;
             processStartInfo.UseShellExecute = false;
@@ -201,7 +202,7 @@ namespace AITranscriptor
             Process process = new Process();
             process.StartInfo = processStartInfo;
 
-            this.textBox1.Text = "\"" + Application.StartupPath + "\\ffmpeg.exe\"" + " " + args; //Debug
+            this.textBox1.Text = "\"" + Application.StartupPath + "\\dll\\ffmpeg.exe\"" + " " + args; //Debug
 
             return process;
         }
@@ -476,7 +477,7 @@ namespace AITranscriptor
             string args = this.whisperArgsSetup(false);
             if (textBox1.Text == "")
             {
-                textBox1.Text = "\"" + Application.StartupPath + "\\main.exe\"" + args;
+                textBox1.Text = "\"" + Application.StartupPath + "\\dll\\main.exe\"" + args;
             }
             else
             {
@@ -562,7 +563,7 @@ namespace AITranscriptor
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
 
-            processStartInfo.FileName = "\"" + Application.StartupPath + "\\main.exe\"";
+            processStartInfo.FileName = "\"" + Application.StartupPath + "\\dll\\main.exe\"";
             processStartInfo.Arguments = this.whisperArgsSetup(no_timestamps);
             processStartInfo.CreateNoWindow = true;
             processStartInfo.UseShellExecute = false;
