@@ -48,3 +48,6 @@ AITranscriptor/AITranscriptor/bin/Debug/translations/TR_Anochece.txt
 AITranscriptor/AITranscriptor/bin/Debug/transcripts/Anochece_timestamps.txt
 AITranscriptor/AITranscriptor/bin/Debug/translations/Anochece.txt
 AITranscriptor/AITranscriptor/bin/Debug/audio/n1_230719_Grabadora.wav
+/AITranscriptor/AITranscriptor/bin/Release/models
+/AITranscriptor/AITranscriptor/bin/Release/transcripts
+/AITranscriptor/AITranscriptor/bin/Release/audio
