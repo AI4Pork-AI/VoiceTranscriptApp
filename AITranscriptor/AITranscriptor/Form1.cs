@@ -202,7 +202,7 @@ namespace AITranscriptor
             Process process = new Process();
             process.StartInfo = processStartInfo;
 
-            this.textBox1.Text = "\"" + Application.StartupPath + "\\dll\\ffmpeg.exe\"" + " " + args; //Debug
+            //this.textBox1.Text = "\"" + Application.StartupPath + "\\dll\\ffmpeg.exe\"" + " " + args; //Debug
 
             return process;
         }
