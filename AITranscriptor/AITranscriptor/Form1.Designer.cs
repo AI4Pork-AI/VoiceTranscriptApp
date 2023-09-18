@@ -126,6 +126,7 @@
             this.testButton.TabIndex = 5;
             this.testButton.Text = "Test";
             this.testButton.UseVisualStyleBackColor = true;
+            this.testButton.Visible = false;
             this.testButton.Click += new System.EventHandler(this.testButton_Click);
             // 
             // modelType
@@ -323,7 +324,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
             this.Name = "Form_Transctiptor";
-            this.Text = "Form1";
+            this.Text = "AI Transcriptor";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form_Transctiptor_FormClosed);
             this.Load += new System.EventHandler(this.Form);
             this.panel3.ResumeLayout(false);
