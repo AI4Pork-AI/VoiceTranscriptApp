@@ -50,6 +50,7 @@
             this.stop = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.statusBox = new System.Windows.Forms.TextBox();
+            this.contact = new System.Windows.Forms.Button();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -120,7 +121,7 @@
             // testButton
             // 
             this.testButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.testButton.Location = new System.Drawing.Point(523, 32);
+            this.testButton.Location = new System.Drawing.Point(266, 36);
             this.testButton.Name = "testButton";
             this.testButton.Size = new System.Drawing.Size(75, 30);
             this.testButton.TabIndex = 5;
@@ -298,11 +299,26 @@
             this.statusBox.TabIndex = 24;
             this.statusBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // contact
+            // 
+            this.contact.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.contact.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.contact.FlatAppearance.BorderSize = 0;
+            this.contact.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.contact.Location = new System.Drawing.Point(705, 37);
+            this.contact.Name = "contact";
+            this.contact.Size = new System.Drawing.Size(83, 29);
+            this.contact.TabIndex = 25;
+            this.contact.Text = "Contact";
+            this.contact.UseVisualStyleBackColor = false;
+            this.contact.Click += new System.EventHandler(this.contact_Click);
+            // 
             // Form_Transctiptor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.contact);
             this.Controls.Add(this.statusBox);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.stop);
@@ -358,6 +374,7 @@
         private System.Windows.Forms.Button stop;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox statusBox;
+        private System.Windows.Forms.Button contact;
     }
 }
 

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -516,6 +517,20 @@ namespace AITranscriptor
         private void translateEnglish_Click(object sender, EventArgs e)
         {
             this.whisperStart(sender, e);
+        }
+
+        private void contact_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("----------------------------------\n" +
+                            "Developer: \n" +
+                            "Name: Pol Llagostera Blasco \n" +
+                            "e-mail: pol.llagostera@udl.cat \n" +
+                            "Tel: 973703317\n" +
+                            "----------------------------------\n" +
+                            "Research Team PI\n" +
+                            "Name: Lluís Miquel Pla Aragones \n" +
+                            "e-mail: lluismiquel.pla@udl.cat\n" +
+                            "tel: 973703318\n");
         }
 
         /// <summary>
