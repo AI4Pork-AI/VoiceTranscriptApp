@@ -2,14 +2,14 @@
 Application written in C# (Frontend), that uses the C++ version of the Whisper Neural Network to transcribe audio.
 
 # Remarks
-- Load using Visual Studio
+- Load using Visual Studio (folder AITranscriptor)
 - The debug or release versions need to have the following structure
   - dll folder with:
     - ffmpeg.exe file (the audio converter)
     - main.exe (the whisper compiled version)
     - SDL2.dll
     - whisper.dll
-  - models folder. This folder is where the whisper models need to be stored. The avaliable models are:
+  - models folder. This folder is where the whisper models need to be stored. The available models are:
     - ggml-tiny.bin
     - ggml-tiny.en.bin
     - ggml-base.bin
@@ -21,4 +21,5 @@ Application written in C# (Frontend), that uses the C++ version of the Whisper N
     - ggml-large.bin
     - ggml-large.en.bin
   - AITranscriptor.exe (the compiled version of the program)
+- In the dll folder of the git, there are present the files main, SDL2 and whisper. Only requires to download the ffmpeg.exe from its official webpage.
     
