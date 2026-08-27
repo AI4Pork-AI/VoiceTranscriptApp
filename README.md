@@ -1,5 +1,6 @@
 # Summary
 Application written in C# (Frontend), that uses the C++ version of the Whisper Neural Network to transcribe audio.
+<img width="800" height="479" alt="imagen" src="https://github.com/user-attachments/assets/9bfd6cd0-d1ba-4414-a43e-bf623e670fae" />
 
 # Remarks
 - Load using Visual Studio (folder AITranscriptor)
